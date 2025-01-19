@@ -164,6 +164,7 @@ Proof.
 move=> A B; case.
 Admitted.
 
+
 Lemma impnotnot: forall P:Prop, P -> ~ ~ P.
 Proof.
 (** 
@@ -177,6 +178,20 @@ negation operator *)
 by apply H0.
 Qed.
 
+Lemma contrap: forall P Q:Prop, (P -> Q) -> ~ Q -> ~ P.
+Proof.
+move=> P Q pq notq.
+intro.
+by move: (pq H) => Hq.
+Qed.
+
+Lemma impfalse: forall P Q R:Prop, (P -> Q) -> (P -> ~ Q) -> P -> R.
+Proof.
+move=> P Q R pq pnotq p.
+move: (pq p)=> q.
+move: (pnotq p).
+by case; apply q.
+(* by [].*)
+Qed.
+
 End Negation.
-
-
