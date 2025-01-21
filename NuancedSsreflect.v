@@ -294,3 +294,25 @@ Lemma eq_bool_prop : x == y -> x = y.
 Proof. by move/eqP. Qed.
 (* problem with negation *)
 End Equality.
+
+Section Using_Definition.
+Variable U : Type. (* Universe *)
+Definition set := U -> Prop. 
+(* Proposition on Universe *)
+(* Proposition predicating on Universe *)
+Definition subset (A B : set) := forall x, A x -> B x.
+Definition transitive (T : Type) (R : T -> T -> Prop) := forall x y z, R x y -> R y z -> R x z.
+Lemma subset_trans : transitive subset.
+Proof.
+rewrite /transitive /subset => x y z.
+move=> subxy subyz t xt.
+by apply: (subyz t); apply: (subxy t).
+Qed.
+
+Lemma subset_trans2 : transitive subset.
+Proof.
+move=> x y z subxy subyz t.
+move/subxy. (* bad explanation *)
+move/subyz. (* bad explanation *)
+by [].
+Qed.
