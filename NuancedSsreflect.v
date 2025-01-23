@@ -316,3 +316,32 @@ move/subxy. (* bad explanation *)
 move/subyz. (* bad explanation *)
 by [].
 Qed.
+
+End Using_Definition.
+
+Section Natural_Numbers.
+Check nat. (* Natural numbers *)
+Print nat. (* Natural numbers is an inductively defined object*)
+Lemma three : S (S (S O)) = 3 /\ 2 = 0.+1.+1.
+Proof. by []. Qed.
+
+(**
+fixpoint
+with fixpoint structure, any inductive type can be 
+used to define recursive functions (those with inductively
+defined object as domain) and induction principles (predicates on 
+inductively defined object 
+*)
+
+Lemma concrete_plus : plus 16 64 = 80.
+Proof.
+
+(* simpl. *) 
+by []. 
+Qed.
+
+(** 
+simpl allows to execute the calculation of a function,
+in this example plus
+*)
+End Natural_Numbers.
