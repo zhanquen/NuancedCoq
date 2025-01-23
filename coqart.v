@@ -195,3 +195,31 @@ by case; apply q.
 Qed.
 
 End Negation.
+
+Section BadInference.
+Definition dyslexic_imp := forall P Q:Prop, (P->Q)->Q->P.
+Variable (P Q: Prop).
+Lemma Bad_dyslexic_imp : dyslexic_imp -> False.
+Proof.
+rewrite /dyslexic_imp=>di.
+move: (di P Q).
+Admitted.
+
+End BadInference.
+
+Section equalityDisjuction.
+(**
+\/ is left-associated.
+*)
+Theorem abcd_c : forall (A:Set)(a b c d:A), a=c \/ b= c \/ c=c \/ d=c.
+Proof.
+move=> A a b c d.
+by right;
+right;
+left.
+Qed.
+
+(** Proof it with Ssreflect! *)
+End equalityDisjusction.
+
+
