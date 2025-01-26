@@ -344,4 +344,32 @@ Qed.
 simpl allows to execute the calculation of a function,
 in this example plus
 *)
+
+Lemma concrete_plus2 : addn 16 64 = 80.
+Proof.
+Print addn.
+simpl. (* no simpl plus *)
+by [].
+Qed.
+
+Print mult.
+Print muln. (* no simpl mult *)
+
+Print le.
+Check (le 1 3).
+Check (leq 1 3).
+(* le is an inductive type *)
+Lemma concrete_le : le 1 3.
+Proof.
+Print Le.le_trans.
+by apply: (Le.le_trans _ 2); apply: Le.le_n_Sn.
+Qed.
+
+Print leq.
+(* leq is a function on nat *)
+
+Lemma concrete_big_leq : 1 <= 3. (* coercion *)
+Proof. by []. Qed.
+Print concrete_le.
+Print concrete_big_leq.
 End Natural_Numbers.
