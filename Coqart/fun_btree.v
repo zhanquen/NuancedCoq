@@ -153,4 +153,14 @@ Fixpoint height (t:Zbtree) : nat :=
 Compute (height t1).
 Compute (height t2).
 Compute (height t3).
+(** returns the mirror of t *)
+Fixpoint mirror (t:Zbtree) : Zbtree :=
+  match t with
+  | leaf => leaf
+  | bnode m tl tr => (bnode m (mirror tr) (mirror tl))
+  end.
+Compute (mirror t1).
+Compute (mirror t2).
+Print t3.
+Compute (mirror t3).
 End Binary_Tree.
