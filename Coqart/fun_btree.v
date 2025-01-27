@@ -124,6 +124,10 @@ Check (Negz 0).
 Check ((-1)%Z).
 Check (bnode (0%Z) leaf leaf).
 (** Checks whether t is a leaf *)
+Definition t1 := leaf.
+Definition t2 : Zbtree := (bnode (0%Z) leaf leaf).
+Definition t3 : Zbtree := (bnode ((-1)%Z) t1 t2).
+
 Definition is_leaf (t: Zbtree) : bool :=
   match t with 
   | leaf => true
@@ -131,4 +135,22 @@ Definition is_leaf (t: Zbtree) : bool :=
   end.
 Compute (is_leaf leaf).
 Compute (is_leaf (bnode (0%Z) leaf leaf)).
+(** Returns the total number of nodes (binary nodes and leaves) of t *)
+Fixpoint size (t: Zbtree) : nat :=
+  match t with
+  | leaf => 1
+  | bnode _ tl tr => ((size tl) + (size tr)).+1
+  end.
+Compute (size leaf).
+Compute (size (bnode (0%Z) leaf leaf)).
+Compute (size t3).
+(** returns the heigth of t *)
+Fixpoint height (t:Zbtree) : nat := 
+  match t with
+  | leaf => 0
+  | bnode _ tl tr => (max (height tl) (height tr)).+1
+  end.
+Compute (height t1).
+Compute (height t2).
+Compute (height t3).
 End Binary_Tree.
