@@ -163,4 +163,20 @@ Compute (mirror t1).
 Compute (mirror t2).
 Print t3.
 Compute (mirror t3).
+
+(** Checks whether n labels some node of t *)
+Fixpoint memb (n : int)(t: Zbtree) : bool :=
+  match t with
+  | leaf => false
+  | bnode m tl tr => ((m == n) || (memb n tl) ||(memb n tr))
+  end.
+Compute (memb ((-1)%Z) t1).
+Compute (memb ((-1)%Z) t2).
+Compute (memb ((-1)%Z) t3).
+Compute (memb (0%Z) t1).
+Compute (memb (0%Z) t2).
+Compute (memb (0%Z) t3).
+Compute (memb (1%Z) t1).
+Compute (memb (1%Z) t2).
+Compute (memb (1%Z) t3).
 End Binary_Tree.
