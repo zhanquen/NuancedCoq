@@ -197,6 +197,32 @@ Qed.
 End Negation.
 
 Section BadInference.
+
+(**
+True, False, programme
+1. What is True, what is False?
+
+2. a hypothesis
+*)
+Lemma whatisfalse : forall P: Prop, False -> P.
+Proof.
+move=> P.
+Print False.
+case.
+Qed.
+(** 
+the object of type False is comparable to 
+an empty set
+
+True is the proposition/condition that the universe
+of objects in our discussion satisfy
+*)
+Lemma whatistrue : forall P: Prop, P -> True.
+Proof.
+move=> P proof.
+Print True.
+by [].
+Qed.
 Definition dyslexic_imp := forall P Q:Prop, (P->Q)->Q->P.
 
 Lemma Bad_dyslexic_imp : dyslexic_imp -> False.
@@ -208,6 +234,48 @@ Print False.
 move: (imppq_q_p False True)=> impft_t_f. 
 (* forall-elim *)
 by apply impft_t_f.
+Qed.
+
+Print True.
+Lemma emptyTrue : forall P : Prop, P->True.
+Proof.
+move=> P p.
+by [].
+Qed.
+
+Lemma imp_negTF : ~True -> False.
+Proof.
+Print not.
+by case.
+Qed.
+
+Lemma eq_negTF : ~True <-> False.
+Proof.
+rewrite /iff.
+by apply conj; first by apply imp_negTF.
+Qed.
+
+Lemma eq_TnegF : True <-> ~False.
+Proof.
+rewrite /iff.
+apply conj.
+  move=> t.
+  by rewrite /not.
+rewrite /not=> ff.
+by [].
+Qed.
+
+Definition dyslexic_contrap :=forall P Q:Prop,(P->Q) -> ~P -> ~Q.
+Lemma Bad_dyslexic_contrap_imp: dyslexic_contrap -> False.
+Proof.
+rewrite /dyslexic_contrap.
+move=> dc.
+move: (dc False True).
+rewrite eq_negTF -eq_TnegF.
+move=> dc1.
+apply dc1.
+rewrite //=.
+by [].
 Qed.
 
 End BadInference.
@@ -236,7 +304,13 @@ Section Intuitionism.
 Lemma and_assoc : forall A B C:Prop, A /\ (B /\ C) -> (A /\ B) /\ C.
 Proof.
 move=> A B C.
-case=>a; case=> b c. (* why does this work ? *)
+(* case splits on the condition, or saying, objects
+in the hypothesis
+e.g case on forall n: nat
+e.g. case on A/\B in the condition
+*)
+case=>a; case=> b c. 
+(* by []. *) (* can be solved trivially *)
 apply conj.
 apply conj.
 rewrite //=.
@@ -248,7 +322,8 @@ Qed.
 Lemma and_imp_dist : forall A B C D:Prop,
    (A -> B) /\ (C -> D) -> A /\ C -> B /\ D.
 Proof.
- tauto.
+move=> A B C D [] imp_ab imp_cd [] a c.
+by apply conj; [apply: imp_ab |apply: imp_cd].
 Qed.
 
 

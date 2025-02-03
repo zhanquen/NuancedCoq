@@ -179,4 +179,60 @@ Compute (memb (0%Z) t3).
 Compute (memb (1%Z) t1).
 Compute (memb (1%Z) t2).
 Compute (memb (1%Z) t3).
+
+(** Computes the list of t's labels (in infix order) *)
+(* operations on the list: mechanism and operations *)
+Inductive my_list: Type :=
+  | nil: my_list
+  | cons: nat -> my_list -> my_list.
+Print my_list.
+Compute (cons 0 nil).
+Compute (cons 1 (cons 2 (cons 3 nil))).
+Check (cons 1 (cons 2 (cons 3 nil))).
+Definition trois : my_list := (cons 1 (cons 2 (cons 3 nil))).
+Print trois.
+
+Definition head (l:my_list) : nat :=
+  match l with nil => 0
+    | cons t q => t
+  end.
+  
+Definition tail (l:my_list) : my_list:=
+  match l with nil => nil
+    | cons t q => q
+  end.
+Compute (head trois).
+Compute (tail trois).
+Theorem tete_trois_vaut_1 : (head trois) = 1.
+Proof.
+rewrite /trois.
+by simpl. (* computable *)
+Qed.
+
+Fixpoint length (l:my_list) : nat :=
+  match l with nil => 0
+    | cons m l1 => S (length l1)
+  end.
+  
+Theorem length_1: length trois = 3.
+Proof.
+rewrite /trois.
+by simpl.
+Qed.
+Theorem length_2: length (tail trois) = 2.
+Proof.
+rewrite /trois /tail.
+by simpl.
+Qed.
+
+Theorem rec_length (l : my_list) : ~(l = nil) -> ((length l) = (length (tail l)).+1).
+Proof.
+move=> notnil.
+have lengthnotzero : 0 < (length l).
+Admitted.
+move: notnil.
+case.
+(* !!! document it with library *)
+Fixpoint infix_list (t:Zbtree) : list int :=
+  
 End Binary_Tree.
