@@ -227,11 +227,11 @@ Qed.
 
 Theorem rec_length (l : my_list) : ~(l = nil) -> ((length l) = (length (tail l)).+1).
 Proof.
-move=> notnil.
-have lengthnotzero : 0 < (length l).
-Admitted.
-move: notnil.
-case.
+case l;first by case.
+move=> n1 ml notemp.
+by simpl. (* tail length computable *)
+Qed.
+
 (* !!! document it with library *)
 Fixpoint infix_list (t:Zbtree) : list int :=
   
