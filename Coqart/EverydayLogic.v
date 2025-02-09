@@ -309,7 +309,8 @@ in the hypothesis
 e.g case on forall n: nat
 e.g. case on A/\B in the condition
 *)
-case=>a; case=> b c. 
+case=>a.
+case=> b c. 
 (* by []. *) (* can be solved trivially *)
 apply conj.
 apply conj.
@@ -330,9 +331,10 @@ Qed.
 Lemma not_contrad : forall A : Prop, ~(A /\ ~A).
 Proof.
 move=> A.
+rewrite /not.
 case.
-move=> a.
-by case.
+move=> a nota.
+apply: (nota a).
 Qed.
 
 Lemma or_and_not : forall A B : Prop, (A\/B)/\~A -> B.
@@ -347,12 +349,27 @@ End Intuitionism.
 Section FiveCharaClassic.
 Definition peirce := forall P Q:Prop, ((P->Q)->P)->P.
 Definition excluded_middle := forall P:Prop, P\/~P.
+Definition classic := forall P:Prop, ~(~P) -> P.
 Definition de_morgan_not_and_not := forall P Q:Prop, ~(~P/\~Q)->P\/Q.
 Definition implies_to_or := forall P Q:Prop, (P->Q)->(~P\/Q).
-Definition classic := forall P:Prop, ~(~P) -> P.
 
 
+Lemma imp23 : excluded_middle -> classic.
+Proof.
+rewrite /excluded_middle /classic.
+move=> proof1.
+move=> P.
+move=> notnotp.
+move: (proof1 P); case.
+  by [].
+rewrite /not in notnotp.
+rewrite /not.
+move=> notp.
+by move: (notnotp notp).
 Qed.
+
+
+
 End FiveCharaClassic.
 
 
