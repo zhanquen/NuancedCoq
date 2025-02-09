@@ -348,10 +348,23 @@ End Intuitionism.
 
 Section FiveCharaClassic.
 Definition peirce := forall P Q:Prop, ((P->Q)->P)->P.
-Definition excluded_middle := forall P:Prop, P\/~P.
 Definition classic := forall P:Prop, ~(~P) -> P.
+Definition excluded_middle := forall P:Prop, P\/~P.
 Definition de_morgan_not_and_not := forall P Q:Prop, ~(~P/\~Q)->P\/Q.
 Definition implies_to_or := forall P Q:Prop, (P->Q)->(~P\/Q).
+
+Lemma imp31 : excluded_middle -> peirce.
+Proof.
+rewrite /excluded_middle /peirce.
+move=> H P Q H0.
+case: (H P).
+by [].
+move=> notp.
+apply: H0.
+move=> p.
+by [].
+Qed.
+(* check on this proof closely! *)
 
 
 Lemma imp23 : excluded_middle -> classic.
