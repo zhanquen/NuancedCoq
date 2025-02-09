@@ -329,14 +329,20 @@ Qed.
 
 Lemma not_contrad : forall A : Prop, ~(A /\ ~A).
 Proof.
- tauto.
+move=> A.
+case.
+move=> a.
+by case.
 Qed.
 
 Lemma or_and_not : forall A B : Prop, (A\/B)/\~A -> B.
 Proof.
- tauto.
+move=> A B [] [a nota|b nota]; by [case: nota|].
 Qed.
+
 End Intuitionism.
+
+(* revise the theorems in Intuinism *)
 
 Section FiveCharaClassic.
 Definition peirce := forall P Q:Prop, ((P->Q)->P)->P.
