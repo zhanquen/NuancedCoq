@@ -364,7 +364,28 @@ apply: H0.
 move=> p.
 by [].
 Qed.
-(* check on this proof closely! *)
+
+Lemma imp12 : peirce -> classic.
+Proof.
+rewrite /peirce /classic.
+move=> H P H0.
+apply: (H P False).
+move=> H1.
+by [].
+Qed.
+(**
+In hypothesis we have
+~(~P)
+((A->B) -> C) -> A by peirce
+we induce that
+((~A) -> C) -> A so that
+((~P) -> C) -> P
+we induce that 
+((~P) -> C) because
+if (~P) then (~P) , ~(~P) then False then C
+we induce that 
+P
+*)
 
 
 Lemma imp23 : excluded_middle -> classic.
