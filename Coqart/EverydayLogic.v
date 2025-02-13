@@ -388,7 +388,35 @@ P
 *)
 
 Lemma imp23 : classic -> excluded_middle.
-Admitted.
+Proof.
+rewrite /classic /excluded_middle.
+move=> H P.
+apply: (H (P\/(~P))).
+rewrite /not.
+move=> H0.
+absurd P.
+  rewrite /not.
+  move=> H1.
+  apply: H0.
+  by left.
+apply: H.
+rewrite /not.
+move=> H1.
+apply: H0.
+by right.
+Qed.
+(**
+Hypothesis: ~~P -> P
+
+~P |- P\/~P || P |- P\/~P
+~P |- P\/~P || (~(P\/~P)),P |- False
+(~(P\/~P)), ~P |- False || (~(P\/~P)),P |- False
+(~(P\/~P)), by Hypothesis |- ~~P || (~(P\/~P)),P |- False
+(~(P\/~P)) |- P || (~(P\/~P)) |- ~P 
+(~(P\/~P)) |- P/\~P
+(~(P\/~P)) |- False
+~(~(P\/~P)), by Hypothesis |- P\/~P
+*)
 
 Lemma imp35 : excluded_middle -> implies_to_or.
 Proof.
@@ -399,6 +427,28 @@ move=> H1; by left.
 move=> H1.
 right.
 apply (H0 H1).
+Qed.
+
+Lemma imp24 : classic -> de_morgan_not_and_not.
+Proof.
+rewrite /classic /de_morgan_not_and_not.
+move=> H P Q H0.
+apply: H .
+rewrite /not; move=> H1.
+apply: H0.
+by apply: conj; rewrite /not; move=> H2; apply: H1; [left|right].
+Qed.
+
+Lemma imp43: de_morgan_not_and_not -> excluded_middle.
+Proof.
+rewrite /de_morgan_not_and_not /excluded_middle.
+move=> H P.
+apply H.
+rewrite /not; move=> H0.
+move: H0.
+case.
+move=> H1 H2.
+apply: H2; apply: H1.
 Qed.
 
 Lemma imp32 : excluded_middle -> classic.
