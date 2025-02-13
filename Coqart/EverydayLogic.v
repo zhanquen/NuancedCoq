@@ -387,8 +387,21 @@ we induce that
 P
 *)
 
+Lemma imp23 : classic -> excluded_middle.
+Admitted.
 
-Lemma imp23 : excluded_middle -> classic.
+Lemma imp35 : excluded_middle -> implies_to_or.
+Proof.
+rewrite /excluded_middle /implies_to_or.
+move=> H P Q H0.
+case: (H P); last first.
+move=> H1; by left.
+move=> H1.
+right.
+apply (H0 H1).
+Qed.
+
+Lemma imp32 : excluded_middle -> classic.
 Proof.
 rewrite /excluded_middle /classic.
 move=> proof1.
