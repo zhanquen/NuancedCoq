@@ -233,6 +233,28 @@ by simpl. (* tail length computable *)
 Qed.
 
 (* !!! document it with library *)
+
+(* inversion of a list *)
+(* eg
+inv nil => nil
+inv (cons 1 nil) => cons 1 inv(nil)
+inv (cons 1 (cons 2 nil)) => 
+
+*)
+Fixpoint inverse2 (l_i : my_list) (l_o : my_list) : my_list := 
+  match l_i with 
+    | nil => l_o
+    | (cons t q) => (inverse2 q (cons t l_o))
+  end.
+Print trois.
+Compute (inverse2 nil nil).
+Compute (inverse2 (cons 0 nil) nil).
+Compute (inverse2 trois nil).
+Definition inverse (l : my_list) : my_list := (inverse2 l nil).
+Compute (inverse nil).
+Compute (inverse trois).
+Compute (inverse (cons 0 nil)).
+
 Fixpoint infix_list (t:Zbtree) : list int :=
   
 End Binary_Tree.
