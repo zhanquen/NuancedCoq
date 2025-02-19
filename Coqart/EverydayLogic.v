@@ -469,4 +469,32 @@ Qed.
 
 End FiveCharaClassic.
 
+Section on_ex. 
+Variables (A:Type) (P Q:A -> Prop).
+Lemma ex_or : (exists x:A, P x \/ Q x) -> ex P \/ ex Q.
+(**
+exists try to associate a combinational proposition as big as possible,
+that's why we add parenthese
+*)
+(**
+what is the difference between 
+inference 
+forall
+exists?
+how to explain the rules of exists?
+*)
+Proof.
+move=> [x H].
 
+
+move: H.
+case;move=> H.
+  left.
+  exists x.
+  by [].
+right.
+exists x.
+by [].
+Qed.
+
+End on_ex.
