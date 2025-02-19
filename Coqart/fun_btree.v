@@ -255,6 +255,55 @@ Compute (inverse nil).
 Compute (inverse trois).
 Compute (inverse (cons 0 nil)).
 
+Fixpoint concat2 (l1 : my_list) (l2 : my_list) : my_list :=
+  match l1 with
+  | nil => l2
+  | (cons t q) => (concat2 q (cons t l2))
+  end .
+ 
+Definition concat (l1 : my_list) (l2 : my_list) : my_list :=
+  (concat2 (inverse l1) l2).
+
+Compute (concat trois (cons 4 nil)).
+
+Lemma concat_nat_list (h : nat) (l : my_list) : 
+  (concat (cons h nil) l) = (cons h l).
+Proof.
+rewrite /concat.
+by simpl.
+Qed.
+
+Lemma concat_assoc (h : nat) (l1 l2 : my_list) :
+  (concat (cons h l1) l2) = (cons h (concat l1 l2)).
+Proof.
+rewrite /concat.
+
+Admitted.
+(* Lemma concat_assoc (l1 *)
+Theorem long_concat (l1 : my_list) (l2 : my_list) : 
+  (length l1) + (length l2) = (length (concat l1 l2)).
+Proof.
+elim: l1.
+  by simpl.
+move=> n1 m H.
+simpl.
+rewrite concat_assoc.
+rewrite (@rec_length (cons n1 (concat m l2))); last by [].
+simpl.
+rewrite -addn1 -(addn1 ((length (concat m l2)))) addnC addnA.
+apply/eqP;rewrite eqn_add2r;apply/eqP.
+rewrite addnC.
+by apply: H.
+Qed.
+
+Theorem idinvinv (l : my_list) : (inverse (inverse l)) = l.
+Proof.
+elim: l.
+  by simpl.
+move=> n1 m H.
+simpl.
+Admitted.
+
 Fixpoint infix_list (t:Zbtree) : list int :=
   
 End Binary_Tree.
