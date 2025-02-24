@@ -470,12 +470,15 @@ Qed.
 End FiveCharaClassic.
 
 Section on_ex. 
+
 Variables (A:Type) (P Q:A -> Prop).
+Variables (B : Prop).
 Lemma ex_or : (exists x:A, P x \/ Q x) -> ex P \/ ex Q.
 (**
 exists try to associate a combinational proposition as big as possible,
 that's why we add parenthese
 *)
+
 (**
 what is the difference between 
 inference 
@@ -484,17 +487,24 @@ exists?
 how to explain the rules of exists?
 *)
 Proof.
-move=> [x H].
-
-
+move=> [x H]. (* case; move=> [x H]. *)
+(**
+|-(exists x, A) -> B
+by elimination rule and by ignoring right subtree
+x: X, A|-B
+*)
 move: H.
 case;move=> H.
   left.
-  exists x.
-  by [].
+  by exists x.
 right.
-exists x.
-by [].
+by exists x.
 Qed.
 
+Lemma ex_or_R : ex P \/ ex Q -> (exists x:A, P x \/ Q x).
+Proof.
+case;move=> [y H]; exists y.
+  by left.
+by right.
+Qed.
 End on_ex.
