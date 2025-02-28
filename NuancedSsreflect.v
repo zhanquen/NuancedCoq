@@ -323,7 +323,9 @@ Section Natural_Numbers.
 Check nat. (* Natural numbers *)
 Print nat. (* Natural numbers is an inductively defined object*)
 Lemma three : S (S (S O)) = 3 /\ 2 = 0.+1.+1.
-Proof. by []. Qed.
+Proof.
+by apply: conj.
+Qed.
 
 (**
 fixpoint
@@ -331,6 +333,23 @@ with fixpoint structure, any inductive type can be
 used to define recursive functions (those with inductively
 defined object as domain) and induction principles (predicates on 
 inductively defined object 
+*)
+
+Definition pair := fun (x : nat) (y : bool) => (x,y).
+Print pair.
+
+Definition natadd := fix add1 (n m : nat) {struct n} : nat :=
+  match n with
+  | 0 => m
+  | p.+1 => (add1 p m).+1
+  end.
+Print natadd.
+Compute (natadd 1 2).
+
+(* fix is an expression-leveled definition of recursive function,
+in this example, natadd is the name of the function while add1 is a structure visited
+recursively as a part of the natadd;
+we will see a similar example in euclidean division
 *)
 
 Lemma concrete_plus : plus 16 64 = 80.
@@ -373,3 +392,22 @@ Proof. by []. Qed.
 Print concrete_le.
 Print concrete_big_leq.
 End Natural_Numbers.
+
+Section Euclidean_division.
+(**
+goal of the section :
+define the Euclidean division
+prove the definition meets requirement of Euclidean division
+prove the injection of Euclidean division
+parametric inductive type
+*)
+
+(* 3.1 *)
+(* 3.2 *)
+(* 3.3 *)
+
+(* Thanks to fixpoints any objects defined inductively 
+can be used to define recursive functions and induction principles
+*)
+Definition edivn_rec d := fix loop (m q : nat) {struct m} := if m - d is m’.+1 then loop m’ q.+1 else (q, m).
+End Euclidean_division.
