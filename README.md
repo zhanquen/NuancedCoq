@@ -1,6 +1,8 @@
 # Nuanced Coq
-The repository is separated into two parts : NuancedSsreflect and Coqart
 -----------------------------------------------------------------------------------------------------------
+
+The repository is separated into two parts : NuancedSsreflect and Coqart
+
 With a pre-request of knowledge about intuistic logic and simple type theory, the reader is recommanded to 
 
 ~ Study the usage of Coq with the book "Coq's art"
@@ -14,5 +16,6 @@ where the note of its exercises are written in ./Coqart/ in the form of Ssreflec
 https://inria.hal.science/inria-00407778v1/document
 
 where the note and explanation of its designing logic are written in ./NuancedSsreflect.v
+
 -----------------------------------------------------------------------------------------------------------
 The nuanced specification should suffer while promoting the magnificent idea to the front line.
