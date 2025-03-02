@@ -354,7 +354,6 @@ we will see a similar example in euclidean division
 
 Lemma concrete_plus : plus 16 64 = 80.
 Proof.
-
 (* simpl. *) 
 by []. 
 Qed.
@@ -393,6 +392,37 @@ Print concrete_le.
 Print concrete_big_leq.
 End Natural_Numbers.
 
+Section Induction_naturals.
+(** rules of using rewrite
+
+rewrite <tactique>.
+rewrite ?<tactique>. (uses the tactique 0tomore times)
+rewrite [in LHS]<tactique>.
+rewrite [in RHS]<tactique>. (use the tactique only on right hand side of the equation)
+rewrite [exp pattern]<tactique>.
+rewrite /=. (equivalent to simpl.)
+rewrite /def. (unfold a definition)
+rewrite -/def.
+rewrite [pattern]/def.
+rewrite -[exp to be replaced]/(exp to replace). 
+rewrite {}Hyp. (use the Hypothesis and throw it)
+rewrite -{}Hyp.
+*)
+Print nat_ind.
+Lemma plus_commute : forall n1 m1, n1 + m1 = m1 + n1.
+Proof.
+elim=>[m1| n IHn m].
+  by rewrite add0n addn0.
+rewrite -[n.+1 + m]/(n + m).+1 IHn.
+(**
+how to understand this step?
+*)
+elim: m=> [|n0 IHn0].
+  by rewrite add0n.
+by rewrite -addnS.
+Qed.
+
+Section Induction_naturals.
 Section Euclidean_division.
 (**
 goal of the section :
