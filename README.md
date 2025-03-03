@@ -18,4 +18,3 @@ https://inria.hal.science/inria-00407778v1/document
 where the note and explanation of its designing logic are written in ./NuancedSsreflect.v
 
 -----------------------------------------------------------------------------------------------------------
-The nuanced specification should suffer while promoting the magnificent idea to the front line.

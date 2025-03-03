@@ -414,15 +414,12 @@ Proof.
 elim=>[m1| n IHn m].
   by rewrite add0n addn0.
 rewrite -[n.+1 + m]/(n + m).+1 IHn.
-(**
-how to understand this step?
-*)
 elim: m=> [|n0 IHn0].
   by rewrite add0n.
 by rewrite -addnS.
 Qed.
 
-Section Induction_naturals.
+End Induction_naturals.
 Section Euclidean_division.
 (**
 goal of the section :
@@ -432,12 +429,53 @@ prove the injection of Euclidean division
 parametric inductive type
 *)
 
-(* 3.1 *)
 (* 3.2 *)
 (* 3.3 *)
 
 (* Thanks to fixpoints any objects defined inductively 
 can be used to define recursive functions and induction principles
 *)
-Definition edivn_rec d := fix loop (m q : nat) {struct m} := if m - d is m’.+1 then loop m’ q.+1 else (q, m).
+Definition fun1 (p3 : nat) : nat -> nat -> nat := fun (p1 p2 : nat) => p1 + p2 + p3.
+
+Definition edivn_rec d := 
+  fix loop (m q : nat) {struct m} := 
+    if m - d is m'.+1 then loop m' q.+1 else (q, m).
+(**
+we realize euclidean division by substraction
+the m'.+1 which indicates a positive integer is necessary
+because m-d == 0 corresponds to m <= d
+*)
+Definition edivn m d := 
+  if d > 0 then edivn_rec d.-1 m 0 else (0, m).
+  
+Definition edivn_rec2 d := 
+  fix loop (m q : nat) {struct m} := 
+    if m - (d - 1) is m'.+1 then loop m' q.+1 else (q, m).
+
+Print bool.
+(**
+Inductive bool : Set :=
+    true : bool | false : bool.
+*)
+Inductive ordinal1 (n : nat) : Type := Ordinal1 m of m < n.
+Print ordinal1.
+Compute (ordinal1 1).
+Variable (a : (ordinal1 1)).
+Check (@Ordinal1 1 0).
+Check a.
+(**
+in the Inductive type ordinal1
+"of" signifies the parameter of the constructor "Ordinal"
+that do not need to be named
+*)
+CoInductive edivn_spec (m d : nat) : nat * nat -> Type := 
+  EdivnSpec q r of m = q * d + r & (d > 0) 
+    ==> (r < d) : edivn_spec m d (q, r).
+Check edivn_spec. 
+(**
+edivn_spec is a parametric type 
+nat → nat → nat * nat → Set
+m.    d.    
+*)
+Print edivn_spec.
 End Euclidean_division.
