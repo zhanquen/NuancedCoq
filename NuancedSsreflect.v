@@ -5,22 +5,21 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive. 
 (**
-Nuanced assortments.
--- A note to Coq, Ssreflect and MathComp
+-- A note to Coq Ssreflect
 
 Zhan JING
 *)
 Section ProveAThm.
 (* What's the link between the proof tree and a Coq-Thm script ? *)
 
-  (** 
+(** 
 An /inference/ is a procedure 
-from axiomic hypotheses (with atomic types, we can regard the atomicity as 
-well known premisses) 
-to a statement (with combinatorical types);
+from axiomic hypotheses (those with atomic types, we can regard the atomicity as 
+well known premisses)
+to a statement;
 A /statement/ is a result of inference.
 
-Note that simplicity of hypotheses is not proportional to the number of connectors.
+Note that simplicity of hypotheses is not proportional to the number of logical connectors.
 e.g. A/\B can be the hypotheses for the conclusion of A.
 *)
 
@@ -34,27 +33,26 @@ The two have inversed conventions.
 
 (** 
 Constructional rules on inference/proof include /introduction/ and /elimination/.
+In an inference procedure:
 An introduction introduces/adds a connector in the conclusion domain 
 along the inference convention;
 An elimination applies/simplifies a connector in the conclusion domain 
 along the inference convention.
 *)
 
-(**
-So, in Coq we try intro-rules when connectors appear in the conclusion domain 
-and that interpreting them is easier;
-we try elim-rules when bringing connectors into proof is easier.
-*)
-
 Variables (A: Prop).
 Theorem identite : A -> A.
 Proof. (* terms above the bar are hypotheses, they are eliminated in the proof tree *)
 intro. (* =>-intro *)
-(*alternative 1*)
 apply: H. (* axiom leaf *)
-(*alternative 2*)
-(* by [] *) (* axiom leaf *)
+(* by [] *)
 Qed. (* termination of proof *)
+
+Theorem identite2 : A -> A.
+Proof.
+intro.
+by []. (* axiom leaf *)
+Qed.
 
 Check identite. (* a terminated proof becomes an applicable term *)
 
@@ -457,25 +455,37 @@ Print bool.
 Inductive bool : Set :=
     true : bool | false : bool.
 *)
-Inductive ordinal1 (n : nat) : Type := Ordinal1 m of m < n.
+Inductive ordinal1 (n : nat) : Type := Ordinal1 m of m < n : (ordinal1 n).
+Print Ordinal1.
 Print ordinal1.
+(**
+in the Inductive type ordinal1
+"of" signifies the parameter of the constructor "Ordinal1"
+that do not need to be named.
+In the example ordinal1, the constructor Ordinal1 is of type 
+nat -> (m < n) -> (ordinal1 n). 
+where the first type nat is implicit.
+*)
 Compute (ordinal1 1).
 Variable (a : (ordinal1 1)).
 Check (@Ordinal1 1 0).
 Check a.
+
 (**
-in the Inductive type ordinal1
-"of" signifies the parameter of the constructor "Ordinal"
-that do not need to be named
-*)
 CoInductive edivn_spec (m d : nat) : nat * nat -> Type := 
   EdivnSpec q r of m = q * d + r & (d > 0) 
     ==> (r < d) : edivn_spec m d (q, r).
-Check edivn_spec. 
-(**
-edivn_spec is a parametric type 
-nat → nat → nat * nat → Set
-m.    d.    
 *)
+
+(**
+EdivnSpec : 
+  (nat * nat) -> m = q * d + r -> (d > 0) ==> (r < d) -> edivn_spec m d (q, r).
+where type (nat * nat) is implicit
+*)
+(* could we use case on coinduction? *)
+CoInductive edivn_spec (m d : nat) : nat * nat -> Type := EdivnSpec :
+forall q r, m = q * d + r -> (d > 0 -> r < d) -> edivn_spec m d (q, r).
+Check EdivnSpec.
+
 Print edivn_spec.
 End Euclidean_division.
