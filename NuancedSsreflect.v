@@ -488,4 +488,14 @@ forall q r, m = q * d + r -> (d > 0 -> r < d) -> edivn_spec m d (q, r).
 Check EdivnSpec.
 
 Print edivn_spec.
+
+Lemma edivnP : forall m d, edivn_spec m d (edivn m d).
+Proof.
+rewrite /edivn=> m.
+move=>[|d]. (* observe here the difference between case split on naturals and nat-induction here *)
+
+rewrite /=.
+rewrite //.
+
+rewrite -{1}[m]/(0 * d.+1 + m). (* {1} signifies the 1-place where m appears *)
 End Euclidean_division.
