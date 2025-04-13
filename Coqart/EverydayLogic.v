@@ -352,7 +352,52 @@ Definition classic := forall P:Prop, ~(~P) -> P.
 Definition excluded_middle := forall P:Prop, P\/~P.
 Definition de_morgan_not_and_not := forall P Q:Prop, ~(~P/\~Q)->P\/Q.
 Definition implies_to_or := forall P Q:Prop, (P->Q)->(~P\/Q).
+(* firstly prove that classic and excluded_middle are equivalent *)
+Lemma imp32 : excluded_middle -> classic.
+Proof.
+rewrite /excluded_middle /classic.
+move=> H0 P notnotP.
+case: (H0 P).
+  by [].
+move=> notP.
+case: notnotP; exact: notP.
+Qed.
+(**
+case on P \/ ~P, ~~P -> P:
+  P -> P trivially
+  (~P /\ ~~P) -> False -> P
+*)
 
+Lemma contra_not1: forall A B : Prop, (A -> B) -> (~B -> ~A).
+Proof.
+move=> A B imp_ab notb.
+rewrite /not.
+move=> a.
+apply: notb.
+apply: imp_ab.
+apply: a.
+Check contra_not.
+(* without classic, its inverse is fault. *)
+Qed.
+
+Lemma imp23 : classic -> excluded_middle.
+Proof.
+rewrite /classic /excluded_middle.
+move=> H0 P.
+apply: (H0 (P\/(~P))).
+rewrite /not.
+move=> H1.
+absurd P.
+  move: H1.
+  apply: contra_not.
+  by move=> p; left.
+apply: H0.
+move: H1.
+apply: contra_not.
+by move=> notp; right.
+Qed.
+
+(* secondly: what is peirce? *)
 Lemma imp31 : excluded_middle -> peirce.
 Proof.
 rewrite /excluded_middle /peirce.
@@ -506,5 +551,20 @@ Proof.
 case;move=> [y H]; exists y.
   by left.
 by right.
+Qed.
+
+Lemma two_is_three : (exists x:A, forall R : A->Prop, R x) -> 2 = 3.
+Proof.
+move=> [x H].
+apply: H.
+Qed.
+
+Lemma forall_no_ex : (forall x:A, P x) -> ~(exists y:A, ~ P y).
+Proof.
+move=> H0.
+case.
+move=> x H1.
+elim: H1.
+apply: (H0 x).
 Qed.
 End on_ex.
