@@ -431,8 +431,8 @@ if (~P) then (~P) , ~(~P) then False then C
 we induce that 
 P
 *)
-
-Lemma imp23 : classic -> excluded_middle.
+(**
+Lemma imp23. : classic -> excluded_middle.
 Proof.
 rewrite /classic /excluded_middle.
 move=> H P.
@@ -449,7 +449,7 @@ rewrite /not.
 move=> H1.
 apply: H0.
 by right.
-Qed.
+Qed. *)
 (**
 Hypothesis: ~~P -> P
 
@@ -495,7 +495,7 @@ case.
 move=> H1 H2.
 apply: H2; apply: H1.
 Qed.
-
+(**
 Lemma imp32 : excluded_middle -> classic.
 Proof.
 rewrite /excluded_middle /classic.
@@ -508,7 +508,7 @@ rewrite /not in notnotp.
 rewrite /not.
 move=> notp.
 by move: (notnotp notp).
-Qed.
+Qed. *)
 
 
 
@@ -567,4 +567,63 @@ move=> x H1.
 elim: H1.
 apply: (H0 x).
 Qed.
-End on_ex.
+
+End on_ex. 
+
+Section pattern_rewrite.
+Require Import Arith.
+Theorem plus_permute2 : forall n m p:nat, n + m + p = n + p + m.
+Proof.
+move=> n m p.
+rewrite -addnA.
+rewrite (@addnC m p).
+rewrite addnA.
+reflexivity.
+Qed.
+End pattern_rewrite.
+
+Section Transitivity_of_Leibniz_equality.
+Theorem trans_leibniz_equality: forall (A:Set) (a b c:A), a = b -> b = c -> a = c.
+Proof.
+move=> A a b c eq_ab eq_bc.
+About eq_ind.
+Check (eq_ind b).
+apply: (eq_ind b).
+  trivial.
+trivial.
+Qed.
+End Transitivity_of_Leibniz_equality.
+
+Section On_Negation_impredicative.
+Definition my_False : Prop := forall P:Prop, P.
+Definition my_not (P:Prop) : Prop := P -> my_False.
+
+Theorem my_notF : my_not my_False.
+Proof.
+rewrite /my_not /my_False.
+move=> H0.
+trivial.
+Qed.
+
+Theorem my_notnotnotP : forall P:Prop, (my_not (my_not (my_not P))) -> (my_not P).
+Proof.
+rewrite /my_not.
+move=> P nnnP p.
+apply: nnnP.
+move=> nP.
+apply: nP.
+trivial.
+Qed.
+
+(**
+since P -> ~ ~ P
+we apply contra : (P -> Q) -> ~ Q -> ~ P
+and get ~ ~ ~ P -> P
+*)
+
+Theorem my_contraPQ : forall P Q:Prop, ~ ~ ~ P -> P -> Q.
+Proof.
+move=> P Q H0 H1.
+by case: H0; case.
+
+End On_Negation_impredicative.
