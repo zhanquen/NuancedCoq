@@ -397,7 +397,54 @@ apply: contra_not.
 by move=> notp; right.
 Qed.
 
-(* secondly: what is peirce? *)
+Lemma imp35 : excluded_middle -> implies_to_or.
+Proof.
+unfold excluded_middle.
+unfold implies_to_or.
+move=> H0 P Q  H1.
+case: (H0 P); move=> H2.
+  right.
+  exact: (H1 H2).
+by left.
+Qed.
+
+Fact boolimp : forall P Q, (~ P \/ Q) -> (P -> Q).
+Proof.
+move=> P Q H0 H1.
+case: H0; move=> H2.
+by absurd P.
+trivial.
+Qed.
+
+Lemma imp51 : excluded_middle -> peirce.
+Proof.
+unfold excluded_middle.
+unfold peirce.
+move=> H0 P Q.
+apply: boolimp.
+case: (H0 P); move=> H1.
+  by right.
+left.
+unfold not.
+move=> H2.
+absurd P; rewrite //.
+apply: H2.
+apply: boolimp.
+by left.
+Qed.
+
+(** secondly: what is peirce? 
+
+we always have nonPorQ -> (P->Q)
+under the EM as hypothesis, we have its inverse
+
+we can case split on the proof of 
+((P->Q)->P)->P
+where P->P is trivial
+when we suppose ~P,
+the presense of Q becomes no important since we have ~P \/Q
+so in the structure of peirce, the Q does not count
+*)
 Lemma imp31 : excluded_middle -> peirce.
 Proof.
 rewrite /excluded_middle /peirce.
