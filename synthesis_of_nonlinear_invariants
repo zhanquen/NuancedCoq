@@ -1,0 +1,30 @@
+From Coq Require Import Init.Prelude Unicode.Utf8.
+From mathcomp Require Import all_ssreflect.
+From mathcomp Require Import fingroup.perm. 
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive. 
+
+From Coq Require Import Sets.Ensembles.
+Check Ensemble.
+Print Ensemble.
+Section Inductive_Invariants.
+(* page 11 *)
+Variable (ft : finType).
+
+Variable (S : {set ft}).
+Check setX.
+Check {set ft}.
+Variable (I : {set ft}) (T : {set prod_finType ft ft}).
+Variable subset_I_T : I \subset S.
+Variable subset_T_SS :  T \subset (setX S S).
+Definition transition_system := (I, T).
+Check (exists s, s \in T).
+Check [exists s, s \in T].
+Definition states_reachable_from (X : {set ft}) := 
+  [set s' in S | [exists s, (s \in X) && ((s, s') \in T)]].
+Check (states_reachable_from I).
+Definition stable_state_space (R : {set ft}) := 
+  (R \subset S) -> (I \subset R) /\ ((states_reachable_from R) \subset R).
+
+End Inductive Invariants.
