@@ -4,6 +4,10 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive. 
 
+(**
+A formal proof for simple conclusions concerning finite set, classical logic and 
+functions over finite set.
+*)
 Section Definition_of_a_set.
 Variable T : finType.
 Check {set T}. (* Definition 1.2.1 *)
@@ -26,7 +30,13 @@ Lemma Ex_1_2_1_4 (E : {set T}) n: #|E| = n -> #|powerset E| = 2 ^ n.
 Proof. move=> H0. by rewrite my_card_powerset H0. Qed. (* Exercice 1.2.1.4 *) 
 Print setI. (* Notation 1.3.1 *)
 Lemma my_subsetIl (A B : {set T}) : A :&: B \subset A.
-Proof. unfold setI. rewrite -{2}(imset_id A). Admitted. (* Remarque 1.3.1 *)
+Proof. 
+apply/subsetP=> x. rewrite in_setI. move/andP=> [H0 H1]. trivial. 
+Qed. 
+Lemma my_subsetIlr (A B : {set T}) : (A :&: B \subset A) /\ (A :&: B \subset B).
+Proof. by split; apply/subsetP=> x; rewrite in_setI; move/andP=> [H0 H1]. Qed.
+(* Remarque 1.3.1 *)
 Check subsetIl.
-Print proper.
+Check subsetIr.
+
 End Definition_of_a_set.
