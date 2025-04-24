@@ -14,7 +14,13 @@ Check {set T}. (* Definition 1.2.1 *)
 Check nat. (* Notation 1.2.1 *)
 Check in_set. (* Notation 1.2.2 *)
 Check setP. (* Definition 1.2.3 *)
-Check eqEsubset. (* Remarque 1.2.1 *)
+Lemma my_eqEsubset (A B : {set T}) : (A \subset B) && (B \subset A) -> (A == B).
+Proof. move/andP=> [AB BA]; move: AB; move/subsetP=> AB. move: BA; move/subsetP=> BA. 
+apply/eqP. apply/setP=> x. Admitted.
+
+
+(* Remarque 1.2.1 *)
+Check eqEsubset. 
 Check (@set0 T). (* Notation 1.2.3 *)
 Check powerset. (* Notation 1.2.4 *)
 Print setD. (* Notation 1.2.4 *)
@@ -38,5 +44,11 @@ Proof. by split; apply/subsetP=> x; rewrite in_setI; move/andP=> [H0 H1]. Qed.
 (* Remarque 1.3.1 *)
 Check subsetIl.
 Check subsetIr.
+Lemma my_subsetUlr (A B : {set T}) : (A \subset A :|: B) /\ (B \subset A :|: B).
+Proof. by split; apply/subsetP=> x; rewrite in_setU => H0; apply/orP; [left|right]. Qed.
+(* Remarque 1.3.2 *)
+Check setX. (* Notation 1.3.3 *)
+Lemma my_setIUl (A B C: {set T}) : (A :|: B) :&: C = (A :&: C) :|: (B :&: C).
+Proof. apply/eqP.
 
 End Definition_of_a_set.
