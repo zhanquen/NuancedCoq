@@ -63,6 +63,23 @@ by rewrite in_setU; move/orP; case; rewrite in_setI; move/andP; case=> H0 H1;
 rewrite in_setI; apply/andP; split; rewrite //; rewrite in_setU; apply/orP; 
 [left|right].
 Qed. (* Exercice 1.3.1.2 *)
-
-
+Variables (A B C : {set T}).
+Lemma my_setDIr : A :\: (B :|: C) :==: (A :\: B) :&: (A :\: C).
+Proof. 
+rewrite eqEsubset; apply/andP; split; apply/subsetP=> x.
+  rewrite in_setD. move/andP. case. move=> H0 H1. 
+  rewrite -in_setC setCU in_setI in H0. move/andP in H0. case: H0=> H00 H01.
+  rewrite in_setI. apply/andP. split;
+  rewrite in_setD; apply/andP; split; trivial; rewrite -in_setC; trivial.
+rewrite in_setI; move/andP; case=> H0 H1. rewrite in_setD. apply/andP.
+rewrite in_setD in H0; rewrite in_setD in H1.
+move/andP in H0; move/andP in H1.
+case: H0 => H00 H01.
+case: H1 => H10 H11.
+split; trivial.
+rewrite -in_setC.
+rewrite setCU. (* ??? *)
+rewrite in_setI; apply/andP; split; rewrite in_setC; trivial.
+Qed.
+Admitted
 End Definition_of_a_set.
