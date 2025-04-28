@@ -26,7 +26,7 @@ apply: AB. apply: BA.
 Qed. (* Remarque 1.2.1 *)
 Check eqEsubset. 
 Check (@set0 T). (* Notation 1.2.3 *)
-Check sub0set. (* Example 1.2.5 *)
+Check sub0set. (* Example 1.2.5 *) (* Admis *)
 Check powerset. (* Notation 1.2.4 *)
 Print setD. (* Notation 1.2.4 *)
 Lemma my_powersetE (A B : {set T}) : (B \subset A) = (B \in powerset A).
@@ -36,10 +36,8 @@ Lemma my_card_powerset (E : {set T}) (n : nat) : #|E| = n -> #|powerset E| = 2^n
 Proof.
 elim: n=> [H0 | n Hn].
   rewrite expn0.
-  Check cards_eq0. (* ??? Admis *)
   move/eqP: H0. rewrite cards_eq0. move/eqP. move=> H0.
-  rewrite H0.
-  rewrite /powerset.
+  rewrite H0. rewrite /powerset.
   have my_subset0: forall A : {set T}, (A == set0) = (A \subset set0).
     move=> A.
     rewrite eqEsubset.
@@ -47,14 +45,14 @@ elim: n=> [H0 | n Hn].
     apply/idP/idP.
       by move/andP; case; move=> H1 H2.
     by move=> H1; apply/andP; rewrite //.
-    apply/eqP.
+  apply/eqP.
+  Check cards_eq0. (* Admis *)
   apply/cards1P.
   exists set0.
   by apply/eqP; rewrite eqEsubset; apply/andP; split; 
     apply/subsetP=> A; rewrite !in_set; rewrite subset0.
 Admitted.
-(* ??? *)
-(* find a way to enumerate E *)
+(* ??? *) (* find a way to enumerate E *)
 Check card_powerset.
 (* Exercice 1.2.1.4 *) 
 Print setI. (* Notation 1.3.1 *)
