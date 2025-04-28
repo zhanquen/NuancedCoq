@@ -16,30 +16,47 @@ Check in_set. (* Notation 1.2.2 *)
 Check setP. (* Definition 1.2.3 *)
 Check eqEsubset.
 Lemma my_eqEsubset (A B : {set T}) : (A \subset B) && (B \subset A) -> (A :==: B).
-Proof. 
-move/andP.
-case=> AB BA.
-move/subsetP in AB; rewrite /sub_mem in AB.
-move/subsetP in BA; rewrite /sub_mem in BA.
+Proof.
+move/andP. case=> AB BA. 
+move/subsetP in AB; rewrite /sub_mem in AB; move/subsetP in BA; rewrite /sub_mem in BA.
 apply/eqP; apply/setP.
 rewrite /eq_mem=> x.
-apply/idP/idP.
+apply/idP/idP. (* ??? *)
 apply: AB. apply: BA.
 Qed. (* Remarque 1.2.1 *)
 Check eqEsubset. 
 Check (@set0 T). (* Notation 1.2.3 *)
+Check sub0set. (* Example 1.2.5 *)
 Check powerset. (* Notation 1.2.4 *)
 Print setD. (* Notation 1.2.4 *)
 Lemma my_powersetE (A B : {set T}) : (B \subset A) = (B \in powerset A).
 Proof. by unfold powerset; rewrite in_set. Qed.
 Check powersetE. (* Proposition 1.2.1 *)
-Lemma my_card_powerset (E : {set T}) : #|powerset E| = 2 ^ #|E|.
-Proof. rewrite cardsE. simpl. 
-(* find a way to enumerate E *)
+Lemma my_card_powerset (E : {set T}) (n : nat) : #|E| = n -> #|powerset E| = 2^n.
+Proof.
+elim: n=> [H0 | n Hn].
+  rewrite expn0.
+  Check cards_eq0. (* ??? Admis *)
+  move/eqP: H0. rewrite cards_eq0. move/eqP. move=> H0.
+  rewrite H0.
+  rewrite /powerset.
+  have my_subset0: forall A : {set T}, (A == set0) = (A \subset set0).
+    move=> A.
+    rewrite eqEsubset.
+    rewrite sub0set.
+    apply/idP/idP.
+      by move/andP; case; move=> H1 H2.
+    by move=> H1; apply/andP; rewrite //.
+    apply/eqP.
+  apply/cards1P.
+  exists set0.
+  by apply/eqP; rewrite eqEsubset; apply/andP; split; 
+    apply/subsetP=> A; rewrite !in_set; rewrite subset0.
 Admitted.
+(* ??? *)
+(* find a way to enumerate E *)
 Check card_powerset.
-Lemma Ex_1_2_1_4 (E : {set T}) n: #|E| = n -> #|powerset E| = 2 ^ n.
-Proof. move=> H0. by rewrite my_card_powerset H0. Qed. (* Exercice 1.2.1.4 *) 
+(* Exercice 1.2.1.4 *) 
 Print setI. (* Notation 1.3.1 *)
 Lemma my_subsetIl (A B : {set T}) : A :&: B \subset A.
 Proof. 
