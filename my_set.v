@@ -96,5 +96,45 @@ rewrite -in_setC.
 rewrite setCU. (* ??? *)
 rewrite in_setI; apply/andP; split; rewrite in_setC; trivial.
 Qed.
-Admitted
 End Definition_of_a_set.
+
+Section my_Logic.
+Hypothesis classic : forall P:Prop, ~ ~ P -> P.
+Corollary impnotnot: forall P:Prop, P -> ~ ~ P.
+Proof. by move=> P H0 []. Qed. (* Proposition 2.2.1.1 *)
+Lemma eq_PnotnotP : forall P:Prop, P <-> ~ ~ P.
+Proof. split; [apply: impnotnot|apply: classic]. Qed. (* Proposition 2.2.1.1 *)
+Corollary contraAB (A B : Prop): (A -> B) -> (~ B -> ~ A).
+Proof. move=> H0 H1. rewrite/not => H2. apply: H1. apply: H0. apply: H2. Qed.
+Lemma negP_or (A B : Prop) : ~ (A \/ B) <-> ~ A /\ ~ B.
+Proof. 
+split; move=> H0.
+  by split; move: H0; apply: contraAB; move=> H0; [left|right].
+by move: H0; case; move=> H0 H1; rewrite/not; case.
+Qed. (* Proposition 2.2.1.2 *)
+Corollary contraBA (A B : Prop): (~ B -> ~ A) -> (A -> B).
+Proof. move=> H0 H1. apply: classic. have notnotA : ~ ~ A by apply: impnotnot.
+move: notnotA. exact: contraAB. Qed.
+Lemma negP_and (A B : Prop) : ~ (A /\ B) <-> ~ A \/ ~ B.
+Proof.
+split; move=> H0; last by move: H0; case; apply: contraAB; case; move=> H0 H1.
+move: H0. apply: contraBA. move=> H0. apply: impnotnot. 
+by split; move: H0; rewrite negP_or; case; move=> H0 H1; apply: classic.
+Qed. (* Proposition 2.2.1.3 *)
+Lemma notAorB (A B : Prop) : (~ A \/ B) -> (A -> B).
+Proof.
+move=> [] H0 H1.
+  by absurd A.
+trivial.
+Qed.
+Lemma impAB_notAorB (A B : Prop) :(A -> B) -> (~ A \/ B).
+Proof.
+move=> H0.
+rewrite (@eq_PnotnotP B).
+rewrite -negP_and.
+case; move=> H1 H2.
+absurd B.
+  trivial.
+exact: H0.
+Qed. (* Proposition 2.2.2.1 *)
+End my_Logic.
