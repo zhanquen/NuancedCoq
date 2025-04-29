@@ -137,4 +137,27 @@ absurd B.
   trivial.
 exact: H0.
 Qed. (* Proposition 2.2.2.1 *)
+
+Lemma notimpAB_AandnotB (A B : Prop) : ~ (A -> B) <-> (A /\ ~ B).
+Proof.
+split; move=> H0; last first.
+  case: H0=> H0 H1 H2.
+  absurd B.
+    trivial.
+  exact: H2.
+split.
+  apply: classic.
+  move: H0.
+  apply: contraAB.
+  move=> H0 H1.
+  by [].
+move: H0.
+apply: contraAB.
+move=> H0 H1.
+trivial.
+Qed. (* Proposition 2.2.2.2 *)
+Lemma Ex221324 (A B : Prop) :  (A /\ (A -> B)) -> B.
+Proof. case=> H0 H1. exact: H1. Qed. (* Exercice 2.2.1.3.1 *)
+Lemma Ex221325 (A B : Prop) : (A -> B) <-> (~ B -> ~ A).
+Proof. by split; move=> H0; [apply: contraAB|apply: contraBA]. Qed. (* Exercice 2.2.1.3.2 *)
 End my_Logic.
