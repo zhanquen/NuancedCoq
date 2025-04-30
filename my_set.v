@@ -32,6 +32,7 @@ Print setD. (* Notation 1.2.4 *)
 Lemma my_powersetE (A B : {set T}) : (B \subset A) = (B \in powerset A).
 Proof. by unfold powerset; rewrite in_set. Qed.
 Check powersetE. (* Proposition 1.2.1 *)
+(* ??? cardinality is not well defined *)
 Lemma my_card_powerset (E : {set T}) (n : nat) : #|E| = n -> #|powerset E| = 2^n.
 Proof.
 elim: n=> [H0 | n Hn].
@@ -51,6 +52,17 @@ elim: n=> [H0 | n Hn].
   exists set0.
   by apply/eqP; rewrite eqEsubset; apply/andP; split; 
     apply/subsetP=> A; rewrite !in_set; rewrite subset0.
+  Check card.
+move=> H0.
+have zeroenumE : 0 < #|E| by rewrite H0; apply: ltn0Sn.
+rewrite card_gt0 in zeroenumE.
+move: zeroenumE; move/set0Pn.
+move=> [] x H1.
+rewrite (@cardsD1 _ x) in H0.
+rewrite cardsD in H0.
+rewrite -sub1set in H1.
+move /setIidPr in H1.
+rewrite H1 cards1 in H0.
 Admitted.
 (* ??? *) (* find a way to enumerate E *)
 Check card_powerset.
@@ -79,6 +91,7 @@ rewrite in_setI; apply/andP; split; rewrite //; rewrite in_setU; apply/orP;
 [left|right].
 Qed. (* Exercice 1.3.1.2 *)
 Variables (A B C : {set T}).
+Print setD.
 Lemma my_setDIr : A :\: (B :|: C) :==: (A :\: B) :&: (A :\: C).
 Proof. 
 rewrite eqEsubset; apply/andP; split; apply/subsetP=> x.
