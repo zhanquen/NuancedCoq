@@ -58,11 +58,14 @@ have zeroenumE : 0 < #|E| by rewrite H0; apply: ltn0Sn.
 rewrite card_gt0 in zeroenumE.
 move: zeroenumE; move/set0Pn.
 move=> [] x H1.
-rewrite (@cardsD1 _ x) in H0.
-rewrite cardsD in H0.
-rewrite -sub1set in H1.
-move /setIidPr in H1.
-rewrite H1 cards1 in H0.
+move: H0.
+rewrite -(setD1K H1).
+rewrite cardsU1.
+rewrite setD11 //=.
+rewrite -{1}(@addn1 n).
+rewrite addnC.
+move/eqP; rewrite eqn_add2r; move/eqP=> H2.
+rewrite expnS.
 Admitted.
 (* ??? *) (* find a way to enumerate E *)
 Check card_powerset.
