@@ -111,7 +111,11 @@ split; trivial.
 rewrite -in_setC.
 rewrite setCU. (* ??? *)
 rewrite in_setI; apply/andP; split; rewrite in_setC; trivial.
-Qed.
+Qed. (* Exercice 1.3.1.3 *)
+Lemma my_cardsX (A1 A2 : {set T}) (n p : nat) : 
+  (#|A1| == n /\ #|A2| == p) -> #|setX A1 A2| == n * p.
+move=> [] H0 H1.
+Qed. (* Exercice 1.3.1.4 *)
 End Definition_of_a_set.
 
 Section my_Logic.
