@@ -17,4 +17,8 @@ https://inria.hal.science/inria-00407778v1/document
 
 where the note and explanation of its designing logic are written in ./NuancedSsreflect.v
 
+~ Study the usage of finite set type
+
+where the basic lemmas and self-proofs are written in ./my_set.v
+
 -----------------------------------------------------------------------------------------------------------
