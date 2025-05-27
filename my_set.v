@@ -30,47 +30,14 @@ Lemma my_sub0set (E : {set T}) : set0 \subset E.
 apply/subsetP; rewrite /sub_mem => x.
 rewrite in_set.
 by [].
+Qed.
 Check sub0set. (* Example 1.2.5 *)
 Check powerset. (* Notation 1.2.4 *)
 Print setD. (* Notation 1.2.4 *)
 Lemma my_powersetE (A B : {set T}) : (B \subset A) = (B \in powerset A).
 Proof. by unfold powerset; rewrite in_set. Qed.
 Check powersetE. (* Proposition 1.2.1 *)
-(* ??? cardinality is not well defined *)
-Lemma my_card_powerset (E : {set T}) (n : nat) : #|E| == n -> #|powerset E| == 2^n.
-Proof.
-elim: n=> [H0 | n Hn].
-  rewrite expn0.
-  move: H0. Check cards_eq0. (* Admis *) rewrite cards_eq0. move/eqP => H0.
-  rewrite H0. rewrite /powerset.
-  have my_subset0: forall A : {set T}, (A == set0) = (A \subset set0).
-    move=> A.
-    rewrite eqEsubset.
-    rewrite sub0set.
-    apply/idP/idP.
-      by move/andP; case; move=> H1 H2.
-    by move=> H1; apply/andP; rewrite //.
-  apply/cards1P.
-  exists set0.
-  by apply/eqP; rewrite eqEsubset; apply/andP; split; 
-    apply/subsetP=> A; rewrite !in_set; rewrite subset0.
-  Check card.
-rewrite expnS.
-move/eqP=> H0.
-have zeroenumE : 0 < #|E| by rewrite H0; apply: ltn0Sn.
-rewrite card_gt0 in zeroenumE.
-move: zeroenumE; move/set0Pn.
-move=> [] x H1.
-move: H0.
-rewrite -(setD1K H1).
-rewrite cardsU1.
-rewrite setD11 //=.
-rewrite -{1}(@addn1 n).
-rewrite addnC.
-move/eqP; rewrite eqn_add2r; move/eqP=> H2.
 
-Admitted.
-(* ??? *) (* find a way to enumerate E *)
 Check card_powerset.
 (* Exercice 1.2.1.4 *) 
 Print setI. (* Notation 1.3.1 *)
@@ -115,13 +82,63 @@ rewrite -in_setC.
 rewrite setCU. (* ??? *)
 rewrite in_setI; apply/andP; split; rewrite in_setC; trivial.
 Qed. (* Exercice 1.3.1.3 *)
+
+Variable (TI : finType) (I : {set TI}).
+Variable (F : TI -> {set T}).
+Check \bigcap_ ( i in I ) F i. (* Notation 1.4.1.1 *)
+Check \bigcup_ ( i in I ) F i. (* Notation 1.4.1.2 *)
+(* ??? *) (* bigprod *)
+(* cardinality *)
+Lemma my_card_powerset (E : {set T}) (n : nat) : #|E| == n -> #|powerset E| == 2^n.
+Proof.
+move: E.
+elim: n=> [E H0 | n Hn E].
+  rewrite expn0.
+  move: H0. Check cards_eq0. (* Admis *) rewrite cards_eq0. move/eqP => H0.
+  rewrite H0. rewrite /powerset.
+  have my_subset0: forall A : {set T}, (A == set0) = (A \subset set0).
+    move=> A0.
+    rewrite eqEsubset.
+    rewrite sub0set.
+    apply/idP/idP.
+      by move/andP; case; move=> H1 H2.
+    by move=> H1; apply/andP; rewrite //.
+  apply/cards1P.
+  exists set0.
+  by apply/eqP; rewrite eqEsubset; apply/andP; split; 
+    apply/subsetP=> A0; rewrite !in_set; rewrite subset0.
+  Check card.
+rewrite expnS.
+move/eqP=> H0.
+have zerocardE : 0 < #|E| by rewrite H0.
+rewrite card_gt0 in zerocardE.
+move: zerocardE; move/set0Pn.
+move=> [] x H1.
+move: H0.
+rewrite -(setD1K H1).
+rewrite cardsU1.
+rewrite setD11 //=.
+rewrite -{1}(@addn1 n).
+rewrite addnC.
+move/eqP; rewrite eqn_add2r=> H2.
+have H3 := Hn (E :\ x) H2; rewrite cardE in H3; move/eqP in H3.
+rewrite -H3.
+rewrite/powerset cardE.
+Admitted.
 Lemma my_cardsX (A1 A2 : {set T}) (n p : nat) : 
   (#|A1| == n /\ #|A2| == p) -> #|setX A1 A2| == n * p.
 move=> [] H0 H1.
-Qed. (* Exercice 1.3.1.4 *)
+rewrite/setX cardE.
+Admitted.
+Check cardsX.
+
+(* Exercice 1.3.1.4 *)
 End Definition_of_a_set.
 
 Section my_Logic.
+(* this section is suggested to be proved in ssrbool, how ever, 
+natural deduction is still a good choice.
+*)
 Hypothesis classic : forall P:Prop, ~ ~ P -> P.
 Corollary impnotnot: forall P:Prop, P -> ~ ~ P.
 Proof. by move=> P H0 []. Qed. (* Proposition 2.2.1.1 *)
