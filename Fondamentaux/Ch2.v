@@ -10,13 +10,27 @@ p30: P(x) is a proposition and P is called a predicate.
 *)
 Check nat.
 Variables E F : finType.
-Proposition __2_1 (P : pred E):
-  ~ (forall x : E, P(x)) <-> exists x : E, ~ P(x).
+(**
+Hypothesis EM : forall A : Prop, (~ ~ A) = A.
+Lemma contra_inv : forall A B : Prop, (~ B -> ~ A) -> (A -> B).
 Proof.
-split; last first.
-- case => x notPx H.
-  by have Px := H x.
-Admitted. (* Excluded Middle is required *)
+move=> A B H.
+have H1 : ~ ~ A -> ~ ~ B by apply: impliesPn.
+by rewrite !EM in H1.
+Qed.
+*)
+Proposition exneg_negforall (P : pred E):
+  (exists x : E, ~ P(x)) -> ~ (forall x : E, P(x)).
+Proof.
+case => x notPx H.
+by have Px := H x.
+Qed.
+Proposition negex_forallneg (P : pred E):
+  ~ (exists x : E, P(x)) -> forall x : E, ~ P(x).
+Proof.
+by move=> H x Px; case: H; exists x.
+Qed.
+
 (* p44 chinese translation error: no set F *)
 Proposition échange_pourtout (P : pred (E * F)) : 
   (forall x : E, forall y : F, P(x,y)) <-> (forall y : F, forall x : E, P(x,y)).
