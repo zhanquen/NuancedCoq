@@ -261,4 +261,38 @@ rewrite in_set.
   by [].
 Qed.
 
+Proposition AICA_videE (E : finType) (A : {set E}):
+  A :&: ~: A == set0.
+Proof.
+apply/eqP/setP/subset_eqP/andP; split; last by apply sub0set.
+rewrite/setI/setC.
+apply/subsetP; rewrite /sub_mem=> x.
+rewrite !in_set.
+move/andP.
+move/setDP.
+rewrite setDv.
+by rewrite in_set0.
+Qed.
+
+Proposition AUCA_U (E : finType) (A : {set E}):
+  A :|: ~: A == [set: E].
+Proof.
+apply/eqP/setP/subset_eqP/andP; split; rewrite/setU/setC;
+apply/subsetP; rewrite /sub_mem => x; rewrite !in_set; first by [].
+rewrite orbN.
+by [].
+Qed.
+
+Proposition CCA_A (E : finType) (A : {set E}):
+  ~: ~: A == A.
+Proof.
+rewrite/setC.
+apply/eqP/setP/subset_eqP/andP; split; 
+apply/subsetP; rewrite /sub_mem=> x; rewrite !in_set.
+- rewrite Bool.negb_involutive.
+  by [].
+- by rewrite Bool.negb_involutive.
+Qed.
+
+  
 End Inclusion_de_deux_ensembles.
