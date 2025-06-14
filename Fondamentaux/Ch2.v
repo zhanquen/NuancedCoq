@@ -169,4 +169,73 @@ move: H1.
 by [].
 Qed.
 
+Proposition my_subsetIl (T : finType )(A B : {set T}) : 
+  A :&: B \subset A.
+Proof. 
+apply/subsetP=> x.
+rewrite in_setI.
+move/andP=> [H0 H1].
+trivial.
+Qed.
+
+Proposition my_subsetUl (T : finType) (A B : {set T}) : 
+  (A \subset A :|: B).
+Proof.
+apply/subsetP=> x.
+rewrite in_setU => H0.
+apply/orP.
+by left.
+Qed.
+
+Proposition my_Ivide (T : finType) (A : {set T}) : 
+  A :&: set0 == set0.
+Proof.
+rewrite -subset0.
+rewrite/setI.
+apply/subsetP; rewrite /sub_mem=> x.
+rewrite in_set.
+rewrite in_set0.
+case/andP => H0 H1.
+by [].
+Qed.
+
+Proposition my_Uvide (T : finType) (A : {set T}) : 
+  A :|: set0 == A.
+Proof.
+apply/eqP/setP/subset_eqP.
+apply/andP; split; last first.
+- by apply my_subsetUl.
+- rewrite/setU.
+  apply/subsetP; rewrite /sub_mem=> x.
+  rewrite in_set.
+  rewrite in_set0.
+  by move/orP; case.
+Qed.
+
+
+Proposition my_setIlU (T : finType) (A B C: {set T}) :
+  A :&: (B :|: C) == (A :&: B) :|: (A :&: C).
+Proof.
+apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x.
+- rewrite/setI/setU !in_set.
+  by rewrite Bool.andb_orb_distrib_r.
+- rewrite/setI/setU !in_set.
+  by rewrite Bool.andb_orb_distrib_r.
+Qed.
+
+  
+Proposition my_setIUl (T : finType) (A B C: {set T}) : 
+  (A :|: B) :&: C == (A :&: C) :|: (B :&: C).
+Proof. 
+rewrite eqEsubset; apply/andP; split; apply/subsetP=> x.
+  rewrite in_setI; move/andP; case; rewrite in_setU; move/orP. 
+  by case=> H0 H1; rewrite in_setU; apply/orP; [left|right]; rewrite in_setI; apply/andP; split.
+by rewrite in_setU; move/orP; case; rewrite in_setI; move/andP; case=> H0 H1; 
+rewrite in_setI; apply/andP; split; rewrite //; rewrite in_setU; apply/orP; 
+[left|right].
+Qed.
+
+
+
+
 End Inclusion_de_deux_ensembles.
