@@ -65,14 +65,16 @@ move: x.
 exact: negex_forallneg.
 Qed.
 
-
-  
-
-
-have H1 : (exneg_negforall H0).
-
-
-
+Proposition forallneg_negex (P : pred E) : 
+  (forall x : E, ~~ P(x)) -> ~ (exists x : E, P(x)).
+Proof.
+apply: my_contra_inv.
+rewrite classic.
+move => [] x H.
+apply: exneg_negforall.
+exists x.
+exact/negPn.
+Qed.
 
 (* p44 chinese translation error: no set F *)
 Proposition échange_pourtout (P : pred (E * F)) : 
