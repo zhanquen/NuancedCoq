@@ -235,7 +235,30 @@ rewrite in_setI; apply/andP; split; rewrite //; rewrite in_setU; apply/orP;
 [left|right].
 Qed.
 
+Proposition my_setCU (E : finType) :
+  ~: [set: E] == set0.
+Proof.
+apply/eqP/setP/subset_eqP/andP.
+rewrite sub0set; split; last by [].
+rewrite/setC.
+apply/subsetP; rewrite /sub_mem=> x.
+rewrite in_set => H.
+have H1 := (@in_setT E x).
+rewrite -(@setDv E [set: E]).
+apply/setDP.
+by split.
+Qed.
 
-
+Proposition my_setCvide (E : finType) :
+  ~: set0 == [set: E].
+Proof.
+rewrite/setC.
+apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
+rewrite in_set.
+- rewrite in_setT in_set0.
+  by [].
+- rewrite in_setT in_set0.
+  by [].
+Qed.
 
 End Inclusion_de_deux_ensembles.
