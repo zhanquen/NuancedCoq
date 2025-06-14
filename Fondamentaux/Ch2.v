@@ -13,6 +13,8 @@ since the definition of sets in this chapter is more general.
 *)
 
 (* two results from the last chapter *)
+Check contra. (* ∀ c b : bool, (c → b) → ~~ b → ~~ c*)
+Check contraLR. (* ∀ c b : bool, (~~ c → ~~ b) → b → c*)
 
 Lemma my_contra : forall A B : Prop, (A -> B) -> (~ B -> ~ A).
 Proof.
@@ -27,26 +29,65 @@ exact: my_contra.
 Qed.
 
 (* p30: P(x) is a proposition and P is called a predicate. *)
+
 Variables E F : finType.
+
 (* p43 Prop 2.2.2 no proof *)
-Proposition exneg_negforall (P : E -> Prop):
-  (exists x : E, ~ P(x)) -> ~ (forall x : E, P(x)).
+Proposition exneg_negforall (P : pred E) :
+  (exists x : E, ~~ P(x)) -> ~ (forall x : E, P(x)).
 Proof.
-case => x notPx H.
-by have Px := H x.
+case=> x.
+move/negP => notPx.
+move=> H.
+have H1 := H x.
+by [].
 Qed.
-Proposition negex_forallneg (P : E -> Prop):
-  ~ (exists x : E, P(x)) -> forall x : E, ~ P(x).
+
+Proposition negex_forallneg (P : pred E) :
+  ~ (exists x : E, P(x)) -> forall x : E, ~~ P(x).
 Proof.
-by move=> H x Px; case: H; exists x.
+move=> H x; apply/negP.
+move=> H1.
+case: H.
+by exists x.
 Qed.
-Proposition negforall_exneg (P : E -> Prop): 
-  ~ (forall x : E, P(x)) -> (exists x : E, ~ P(x)).
+
+Proposition negforall_exneg (P : pred E) : 
+  ~ (forall x : E, P(x)) -> (exists x : E, ~~ P(x)).
 Proof.
 apply: my_contra_inv.
 rewrite classic=> H0.
 move=> x.
 rewrite -(classic (P x)).
-move : x.
+move/negP=> H.
+move: H; apply/negP.
+move: x.
 exact: negex_forallneg.
 Qed.
+
+
+  
+
+
+have H1 : (exneg_negforall H0).
+
+
+
+
+(* p44 chinese translation error: no set F *)
+Proposition échange_pourtout (P : pred (E * F)) : 
+  (forall x : E, forall y : F, P(x,y)) <-> (forall y : F, forall x : E, P(x,y)).
+Proof.
+by split=> [H y x|H x y]; apply: H.
+Qed.
+
+Proposition échange_existe (P : pred (E * F)): 
+  (exists x : E, exists y : F, P(x,y)) <-> (exists y : F, exists x : E, P(x,y)).
+Proof.
+(* p44 Prop 2.2 no proof *)
+by split; [move=> [] x [] y Pxy|move=> [] y [] x Pyx]; 
+  (* the existence in the presequent could be moved into hypothesis *)
+  [exists y; exists x| exists x; exists y].
+  (* the existence is applied *)
+Qed.
+End Théorie_des_ensembles.
