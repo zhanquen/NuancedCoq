@@ -294,5 +294,29 @@ apply/subsetP; rewrite /sub_mem=> x; rewrite !in_set.
 - by rewrite Bool.negb_involutive.
 Qed.
 
+Proposition Csubset (E : finType) (A B : {set E}):
+  A \subset B <-> ~: B \subset ~: A.
+Proof.
+split; move/subsetP; rewrite /sub_mem => H; apply/subsetP; rewrite /sub_mem => x.
+- rewrite !in_setC.
+  apply: contra.
+  exact: H.
+- apply: contraLR.
+  rewrite -!in_setC.
+  exact: H.
+Qed.
+
+Proposition ABD (E : finType) (A B : {set E}):
+  A :\: B == A :&: ~: B.
+Proof.
+apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x.
+- move/setDP; case => H0 H1.
+  rewrite/setI in_set in_setC.
+  by apply/andP; split.
+- rewrite/setI in_set in_setC.
+  move/andP; case => H0 H1.
+  apply/setDP.
+  by split.
+Qed.
   
 End Inclusion_de_deux_ensembles.
