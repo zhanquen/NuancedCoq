@@ -92,4 +92,44 @@ by split; [move=> [] x [] y Pxy|move=> [] y [] x Pyx];
   [exists y; exists x| exists x; exists y].
   (* the existence is applied *)
 Qed.
+
+Variable T : finType.
+
+Proposition inclusion_réflexitivité (A : {set T}) : A \subset A.
+Proof.
+apply/subsetP; rewrite /sub_mem.
+move=> x.
+by [].
+Qed.
+
+Proposition inclusion_transitivité (A B C : {set T}) :
+  (A \subset B) && (B \subset C) -> (A \subset C).
+Proof.
+move/andP => [].
+move/subsetP; rewrite/sub_mem => H1.
+move/subsetP; rewrite/sub_mem => H2.
+apply/subsetP; rewrite/sub_mem => x.
+move=> H3.
+apply: H2.
+apply: H1.
+by [].
+Qed.
+
+Proposition double_inclusion_E (A B : {set T}) : 
+  (A \subset B) && (B \subset A) <-> (A == B).
+Proof.
+split.
+- move/andP. case=> AB BA. 
+  move/subsetP in AB; rewrite /sub_mem in AB; move/subsetP in BA; rewrite /sub_mem in BA.
+  apply/eqP; apply/setP; rewrite /eq_mem.
+  move=> x.
+  apply/idP/idP.
+  - exact: AB. 
+  - exact: BA.
+- move/eqP => H.
+  rewrite H.
+  rewrite inclusion_réflexitivité.
+  by [].
+Qed.
+  
 End Théorie_des_ensembles.
