@@ -448,16 +448,29 @@ Proposition bigcap_De_Morgan :
 Proof.
 apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
 rewrite/setC in_set; last first.
-  move/bigcupP => [] i0 Hi0.
-  rewrite in_set => H.
+- move/bigcapP => H.
+  apply/bigcupP.
+  
+  apply: Prop_negforall_exneg.
+  Check propositional_extensionality.
+  apply (Prop_exneg_negforallE).
+  move/bigcupP.
+  move=> H.
+  
   apply/bigcapP.
+  
+  
+  move/implyPP.
+  move=> [] i0 Hi0. 
+  rewrite in_set => H.
+  
   move=> H1.
   have H2 := (H1 i0 Hi0).
   move/negP in H.
   by [].
 - move/bigcapP => H.
 Admitted.
-  
+(* p77 Prop 2.13.2.left a typo in the demonstration *)
   
   
   
