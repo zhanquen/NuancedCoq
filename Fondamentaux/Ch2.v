@@ -398,6 +398,8 @@ Qed.
 
 End Produit_Cartesien.
 
+Section Famille_de_Partition.
+
 Variable E I : finType.
 
 Variable (A : I -> {set E}) (B : {set E}).
@@ -448,36 +450,36 @@ Proposition bigcap_De_Morgan :
 Proof.
 apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
 rewrite/setC in_set; last first.
-- move/bigcapP => H.
-  apply/bigcupP.
-  
-  apply: Prop_negforall_exneg.
-  Check propositional_extensionality.
-  apply (Prop_exneg_negforallE).
-  move/bigcupP.
-  move=> H.
-  
+- move/bigcupP.
+  move=> [] i0 Hi0.
+  rewrite in_set.
+  move/negP => H0.
   apply/bigcapP.
-  
-  
-  move/implyPP.
-  move=> [] i0 Hi0. 
-  rewrite in_set => H.
-  
-  move=> H1.
+  move => H1.
   have H2 := (H1 i0 Hi0).
-  move/negP in H.
   by [].
 - move/bigcapP => H.
-Admitted.
+  apply/bigcupP.
+  have H1 : exists i : I, ~ (i  \in I → x  \in A i).
+  (** Here we deduce again the Proposition negforall_exneg, but in a more
+  general way to help us complete the proof
+  *)
+    move: H.
+    apply: my_contra_inv.
+    rewrite classic=> H i.
+    rewrite -(classic (i  \in I → x  \in A i)).
+    move=> H1.
+    case: H.
+    by exists i.
+  case: H1 => i0 H1.
+  move/implyP in H1.
+  rewrite negb_imply in H1.
+  move/andP in H1.
+  case: H1 => H1 H2.
+  exists i0; first by [].
+  rewrite in_set.
+  by [].
+Qed.
 (* p77 Prop 2.13.2.left a typo in the demonstration *)
-  
-  
-  
-  
-  
-  
-Section Famille_de_Partition.
-
 
 End Famille_de_Partition.
