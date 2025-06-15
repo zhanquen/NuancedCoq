@@ -342,3 +342,45 @@ rewrite CCA_A.
 by [].
 Qed.
 End Inclusion_de_deux_ensembles.
+
+Section Produit_Cartesien.
+
+Variables E F G : finType.
+
+Variables (A : {set E}) (B : {set F}) (C : {set G}).
+
+Proposition XAB_vide :
+  (setX A B == set0) <-> (A == set0) || (B == set0).
+Proof.
+split; last first.
+- have [/eqP|/eqP] := boolP (A == set0)=> A0; rewrite //=; move=> H.
+  - rewrite/setX.
+    rewrite A0.
+    apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
+      rewrite !in_set//=.
+  - move/eqP in H; rewrite H.
+    rewrite/setX.
+    apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
+      rewrite !in_set//=.
+    by move/andP; case=> H1.
+- apply: my_contra_inv.
+  move/negP.
+  rewrite negb_or.
+  move/andP; case.
+  move/set0Pn; case => a H0.
+  move/set0Pn; case => b H1.
+  rewrite -subset0.
+  apply/negP.
+  apply/subsetP; rewrite /sub_mem.
+  move=> H.
+  have Hab := H (a, b).
+  rewrite in_set0 in_setX in Hab.
+  move/implyP in Hab.
+  rewrite H0 H1 /= in Hab.
+  by [].
+Qed.
+(* p72 Prop 2.12.1 demonstration a little simple *)
+
+
+
+End Produit_Cartesien.
