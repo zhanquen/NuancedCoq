@@ -284,8 +284,9 @@ by [].
 Qed.
 
 Proposition CCA_A (E : finType) (A : {set E}):
-  ~: ~: A == A.
+  ~: ~: A = A.
 Proof.
+apply/eqP.
 rewrite/setC.
 apply/eqP/setP/subset_eqP/andP; split; 
 apply/subsetP; rewrite /sub_mem=> x; rewrite !in_set.
@@ -319,4 +320,25 @@ apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x.
   by split.
 Qed.
   
+Proposition De_Morgan_CI (E : finType) (A B : {set E}):
+  ~: (A :&: B) = ~: A :|: ~: B.
+Proof.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x.
+- rewrite/setI/setU/setC.
+  rewrite !in_set.
+  by rewrite negb_and.
+- rewrite/setI/setU/setC.
+  rewrite !in_set.
+  by rewrite negb_and.
+Qed.
+
+Proposition De_Morgan_CU (E : finType) (A B : {set E}):
+  ~: (A :|: B) == ~: A :&: ~: B.
+Proof.
+have H := (@De_Morgan_CI _ (~: A) (~: B)).
+rewrite !CCA_A in H.
+rewrite -H.
+rewrite CCA_A.
+by [].
+Qed.
 End Inclusion_de_deux_ensembles.
