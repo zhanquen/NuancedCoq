@@ -345,11 +345,7 @@ End Inclusion_de_deux_ensembles.
 
 Section Produit_Cartesien.
 
-Variables E F G : finType.
-
-Variables (A : {set E}) (B : {set F}) (C : {set G}).
-
-Proposition XAB_vide :
+Proposition XAB_vide (E F : finType) (A : {set E}) (B : {set F}) :
   (setX A B == set0) <-> (A == set0) || (B == set0).
 Proof.
 split; last first.
@@ -381,6 +377,94 @@ split; last first.
 Qed.
 (* p72 Prop 2.12.1 demonstration a little simple *)
 
-
+Proposition IXDl (E F : finType) (A B : {set E}) (C : {set F}) :
+  setX (A :&: B) C == (setX A C) :&: (setX B C).
+Proof.
+apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
+      rewrite !in_set//=.
+- rewrite /in_mem /=.
+  move/andP => []; move/andP => [] => Ha Hb Hc.
+  rewrite /in_mem /=. (* !!! *)
+  rewrite andbA. (* !!! *)
+  apply/andP; split; rewrite //.
+  apply/andP; split; rewrite //.
+  apply/andP; split; rewrite //.
+- rewrite /in_mem /=.
+  rewrite andbA.
+  move/andP => []; move/andP => []; move/andP => [] H1 H2 H3 H4.
+  apply/andP; split; rewrite //.
+  apply/andP; split; rewrite //.
+Qed.
 
 End Produit_Cartesien.
+
+Variable E I : finType.
+
+Variable (A : I -> {set E}) (B : {set E}).
+
+Proposition Ibigcup_Dr :
+  B :&: \bigcup_ ( i in I ) A i = \bigcup_ ( i in I ) (B :&: A i).
+Proof.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
+      rewrite !in_set//=.
+- move/andP; case => H0.
+  move/bigcupP => [] i0 Hi0 H1.
+  apply/bigcupP.
+  exists i0; first by [].
+  by rewrite/setI in_set H1 H0.
+- move/bigcupP => [] i0 Hi0.
+  rewrite/setI in_set.
+  move/andP => [] H0 H1.
+  rewrite H0 /=.
+  apply/bigcupP.
+  by exists i0; first by [].
+Qed.
+
+Proposition Ibigcup_Dl :
+  (\bigcup_ ( i in I ) A i) :&: B = \bigcup_ ( i in I ) (A i :&: B).
+Proof.
+(* p77 Prop 2.13 demonstration not clear *)
+rewrite setIC.
+rewrite Ibigcup_Dr.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x.
+- move/bigcupP => [] i0 Hi0.
+  rewrite/setI in_set.
+  move/andP => [] H1 H2.
+  apply/bigcupP.
+  exists i0; first by [].
+  rewrite in_set.
+  by rewrite H1 H2.
+- move/bigcupP => [] i0 Hi0.
+  rewrite/setI in_set.
+  move/andP => [] H1 H2.
+  apply/bigcupP.
+  exists i0; first by [].
+  rewrite in_set.
+  by rewrite H1 H2.
+Qed.
+
+Proposition bigcap_De_Morgan : 
+  ~: (\bigcap_ ( i in I ) A i) = \bigcup_ ( i in I ) ~: A i.
+Proof.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite /sub_mem=> x;
+rewrite/setC in_set; last first.
+  move/bigcupP => [] i0 Hi0.
+  rewrite in_set => H.
+  apply/bigcapP.
+  move=> H1.
+  have H2 := (H1 i0 Hi0).
+  move/negP in H.
+  by [].
+- move/bigcapP => H.
+Admitted.
+  
+  
+  
+  
+  
+  
+  
+Section Famille_de_Partition.
+
+
+End Famille_de_Partition.
