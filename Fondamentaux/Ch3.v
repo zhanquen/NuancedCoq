@@ -34,4 +34,6 @@ rewrite /=.
 by [].
 Qed.
 
+(* p100 typo : h \o (g \o h) *)
 End Définitions_et_premiers_exemples.
+
