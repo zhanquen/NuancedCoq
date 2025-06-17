@@ -102,4 +102,14 @@ apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => y.
     exact: orbT.
 Qed.
 
+Proposition image_inter :
+  f @: (E' :&: E'') \subset f @: E' :&: f @: E''.
+Proof.
+apply/subsetP; rewrite/sub_mem => y.
+move/imsetP => [] x H0 H1.
+rewrite in_setI in H0; move/andP in H0.
+move: H0 => [] H00 H01.
+rewrite in_setI.
+by apply/andP; split; apply/imsetP; exists x.
+Qed.
 End Définitions_et_premiers_exemples.
