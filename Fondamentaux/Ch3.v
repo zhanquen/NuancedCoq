@@ -35,5 +35,17 @@ by [].
 Qed.
 
 (* p100 typo : h \o (g \o h) *)
-End Définitions_et_premiers_exemples.
 
+Proposition image_d'une_composée :
+  (g \o f) @: E \subset g @: F.
+Proof.
+apply/subsetP; rewrite/sub_mem => z.
+move/imsetP. (** definition of imset *)
+move => [] x H0.
+rewrite /= => H1.
+apply/imsetP.
+exists (f x); last by [].
+by [].
+Qed.
+
+End Définitions_et_premiers_exemples.
