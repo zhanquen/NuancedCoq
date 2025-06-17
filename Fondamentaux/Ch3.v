@@ -76,7 +76,30 @@ apply: H0.
 by [].
 Qed.
 
-
-  
+Proposition image_union :
+  f @: (E' :|: E'') = f @: E' :|: f @: E''.
+Proof.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => y.
+- move/imsetP => [] x.
+  rewrite in_setU.
+  move/orP => [] H0 H1; rewrite in_set.
+  - apply/orP; left.
+    by apply/imsetP; exists x.
+  - apply/orP; right.
+    by apply/imsetP; exists x.
+- rewrite in_setU.
+  move/orP => [].
+  - move/imsetP => [] x H0 H1.
+    apply/imsetP.
+    exists x; last by [].
+    rewrite in_setU.
+    by rewrite H0.
+  - move/imsetP => [] x H0 H1.
+    apply/imsetP.
+    exists x; last by [].
+    rewrite in_setU.
+    rewrite H0.
+    exact: orbT.
+Qed.
 
 End Définitions_et_premiers_exemples.
