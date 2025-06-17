@@ -48,4 +48,35 @@ exists (f x); last by [].
 by [].
 Qed.
 
+Proposition image_vide : 
+  f @: set0 = set0.
+Proof.
+apply/eqP.
+rewrite -subset0.
+apply/subsetP; rewrite/sub_mem => y.
+move/imsetP.
+move=> [] x.
+rewrite in_set.
+by [].
+Qed.
+
+Variables (E' E'' : {set E}).
+Hypothesis (E'E : E' \subset E) (E''E : E'' \subset E).
+Proposition image_partie :
+  E' \subset E'' -> f @: E' \subset f @: E''.
+Proof.
+move=> H0.
+apply/subsetP; rewrite/sub_mem => y.
+move/imsetP => [] x H1 H2.
+apply/imsetP.
+move/subsetP in H0.
+rewrite/sub_mem in H0.
+exists x; last by [].
+apply: H0.
+by [].
+Qed.
+
+
+  
+
 End Définitions_et_premiers_exemples.
