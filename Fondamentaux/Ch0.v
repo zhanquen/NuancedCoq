@@ -69,7 +69,12 @@ Proposition dém_équivalence2 (P1 : Prop) (H : P <-> P1) : P <-> Q.
 rewrite H.
 Admitted.
 
-Proposition distinction_cas : P \/ Q -> R.
+Proposition distinction_cas1 : P \/ Q -> R.
 move => [].
+Admitted.
+
+Proposition distinction_cas2 : P \/ Q -> R.
+case.
+Admitted.
 
 End Récapitulatif_des_méthodes_déjÀ_vues.
