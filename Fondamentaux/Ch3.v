@@ -112,4 +112,16 @@ move: H0 => [] H00 H01.
 rewrite in_setI.
 by apply/andP; split; apply/imsetP; exists x.
 Qed.
+
+Proposition image_réciproque_vide :
+  f @^-1: set0 = set0.
+Proof.
+apply/eqP.
+rewrite -subset0.
+apply/subsetP; rewrite/sub_mem => x.
+rewrite/preimset. (** definition of preimset *)
+rewrite in_set in_set0.
+by [].
+Qed.
+
 End Définitions_et_premiers_exemples.
