@@ -124,4 +124,18 @@ rewrite in_set in_set0.
 by [].
 Qed.
 
+Proposition image_réciproque_Image :
+  f @^-1: (f @: [set: E]) = [set: E].
+Proof.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
+- move => H0.
+  by rewrite in_setT.
+- move => H0.
+  rewrite/preimset.
+  rewrite in_set.
+  apply/imsetP.
+  exists x; first by [].
+  by [].
+Qed.
+
 End Définitions_et_premiers_exemples.
