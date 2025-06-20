@@ -127,11 +127,12 @@ Qed.
 Proposition image_réciproque_Image :
   f @^-1: (f @: [set: E]) = [set: E].
 Proof.
-apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
-- move => H0.
+apply/setP/subset_eqP/andP; split.
+- rewrite/preimset.
+  apply/subsetP; rewrite/sub_mem => x; rewrite in_set.
+  move => H0.
   by rewrite in_setT.
-- move => H0.
-  rewrite/preimset.
+- apply/subsetP; rewrite/sub_mem => x H0.
   rewrite in_set.
   apply/imsetP.
   exists x; first by [].
