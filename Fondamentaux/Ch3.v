@@ -61,7 +61,9 @@ by [].
 Qed.
 
 Variables (E' E'' : {set E}).
+
 Hypothesis (E'E : E' \subset E) (E''E : E'' \subset E).
+
 Proposition image_partie :
   E' \subset E'' -> f @: E' \subset f @: E''.
 Proof.
@@ -113,6 +115,8 @@ rewrite in_setI.
 by apply/andP; split; apply/imsetP; exists x.
 Qed.
 
+Variables F' F'' : {set F}.
+
 Proposition image_réciproque_vide :
   f @^-1: set0 = set0.
 Proof.
@@ -137,6 +141,17 @@ apply/setP/subset_eqP/andP; split.
   apply/imsetP.
   exists x; first by [].
   by [].
+Qed.
+
+Proposition subset_stable_réciproque :
+  F' \subset F'' -> f @^-1: F' \subset f @^-1: F''.
+Proof.
+move => H0.
+apply/subsetP; rewrite/sub_mem => x.
+rewrite/preimset !in_set => H1.
+move/subsetP in H0.
+rewrite/sub_mem in H0.
+exact: H0.
 Qed.
 
 End Définitions_et_premiers_exemples.
