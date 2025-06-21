@@ -154,4 +154,32 @@ rewrite/sub_mem in H0.
 exact: H0.
 Qed.
 
+Proposition réciproque_union :
+  f @^-1: (F' :|: F'') = f @^-1: F' :|: f @^-1: F''.
+Proof.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
+- rewrite/preimset.
+  move=> H0.
+  rewrite in_set in_setU in H0.
+  rewrite in_setU.
+  rewrite !in_set.
+  by [].
+- by rewrite/preimset !in_set.
+Qed.
+
+Proposition réciproque_inter :
+  f @^-1: (F' :&: F'') = f @^-1: F' :&: f @^-1: F''.
+Proof.
+apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
+- rewrite/preimset.
+  rewrite in_set.
+  move=> H0.
+  rewrite in_setI in H0.
+  rewrite in_setI.
+  rewrite !in_set.
+  by [].
+- by rewrite/preimset !in_set.
+Qed.
+
+
 End Définitions_et_premiers_exemples.
