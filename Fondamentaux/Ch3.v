@@ -181,5 +181,26 @@ apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
 - by rewrite/preimset !in_set.
 Qed.
 
+Proposition comp_inj1 :
+  (injective f) /\ (injective g) -> injective (g \o f).
+Proof.
+case => H0 H1.
+move => x x'.
+rewrite /= => H2.
+apply: H0.
+apply: H1.
+by [].
+Qed.
+
+Proposition comp_inj2 :
+  injective (g \o f) -> injective f.
+Proof.
+move => H0 x x' H1.
+have H2 : g (f x) = g (f x') by rewrite H1.
+apply: H0.
+rewrite /=.
+by [].
+Qed.
+
 
 End Définitions_et_premiers_exemples.
