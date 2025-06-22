@@ -202,5 +202,31 @@ rewrite /=.
 by [].
 Qed.
 
+Definition surjective f := forall y : F, exists x : E, y = f x.
+
+Proposition imfF_surj_E :
+  surjective f <-> (f @: E == [set: F]).
+Proof.
+split.
+- move => H0.
+  apply/eqP/setP/subset_eqP/andP; split.
+  - apply/subsetP; rewrite/sub_mem => y.
+    by rewrite in_set.
+  - apply/subsetP; rewrite/sub_mem => y.
+    move => H1.
+    apply/imsetP.
+    move: (H0 y) => [x H2].
+    by exists x.  
+- move/eqP.
+  move => H0 y.
+  move/setP/subset_eqP/andP in H0.
+  move: H0 => [H1 H2].
+  move/subsetP in H2.
+  rewrite/sub_mem in H2.
+  have/imsetP H3 := H2 y (in_setT y).
+  move: H3 => [x H4 H5].
+  by exists x.
+Qed.
+  
 
 End Définitions_et_premiers_exemples.
