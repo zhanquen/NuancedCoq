@@ -41,6 +41,18 @@ split.
     exact: (trE H0 H1).
 Qed.
 
+Variable R : {set E}.
+
+(* Hypothesis H_R1 : forall x y, (x \in R) && (y \in R) -> x != y -> ~ (rE x y). *)
+
+Hypothesis H_R2 : forall z : E, exists! x : E, (x \in R) && (z \in [set z0 | rE x z0]).
+
+Proposition classe_equivalence_partition : 
+  [set: E] != set0 -> [set: E] = \bigcup_ ( x in R ) [set z | rE x z].
+Proof.
+Admitted.
+
+
 End Relation_d'équivalence.
 
 Section Relation_d'ordre.
