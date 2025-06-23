@@ -9,6 +9,40 @@ In this chapter, some properties and examples related to Relation are
 demonstrated except those concerning a concrete number set.
 *)
 
+Section Relation_d'équivalence.
+
+Variable E : finType.
+
+Variable (rE : rel E).
+
+Variables (trE : transitive rE) (rrE : reflexive rE) (srE : symmetric rE).
+
+Variable rE_equivalence : transitive rE /\ reflexive rE /\ symmetric rE.
+
+Variables x y : E.
+
+Lemma equiv_E_repres : 
+  [set z | rE x z] = [set z | rE z y] <-> rE x y.
+Proof.
+split.
+- move/setP/subset_eqP/andP => []; move/subsetP; rewrite/sub_mem => H0 H1.
+  have H := H0 x.
+  rewrite !in_set in H.
+  move: (H (rrE x)).
+  by [].
+- move => H0.
+  apply/setP/subset_eqP/andP => []; split; apply/subsetP; rewrite/sub_mem => z'.
+  - rewrite in_set.
+    move => H1.
+    rewrite srE in H1.
+    rewrite in_set.
+    exact: (trE H1 H0).
+  - rewrite !in_set srE => H1.
+    exact: (trE H0 H1).
+Qed.
+
+End Relation_d'équivalence.
+
 Section Relation_d'ordre.
 
 Variables E F : finType.
