@@ -48,7 +48,7 @@ Variable R : {set E}.
 Hypothesis H_R2 : forall z : E, exists! x : E, (x \in R) && (z \in [set z0 | rE x z0]).
 
 Proposition classe_equivalence_partition : 
-  [set: E] = \bigcup_ ( x in R ) [set z | rE x z].
+  [set: E] != set0 -> [set: E] = \bigcup_ ( x in R ) [set z | rE x z].
 Proof.
 Admitted.
 
