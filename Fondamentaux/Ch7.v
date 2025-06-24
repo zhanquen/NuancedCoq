@@ -48,9 +48,24 @@ Variable R : {set E}.
 Hypothesis H_R2 : forall z : E, exists! x : E, (x \in R) && (z \in [set z0 | rE x z0]).
 
 Proposition classe_equivalence_partition : 
-  [set: E] != set0 -> [set: E] = \bigcup_ ( x in R ) [set z | rE x z].
-Proof.
-Admitted.
+  [set: E] != set0 -> 
+  ([set: E] = \bigcup_ ( x in R ) [set z | rE x z]) /\ 
+  (forall x, x \in R -> [set z | rE x z] != set0) /\
+  (forall x y, x \in R /\ y \in R -> [disjoint [set z | rE x z] & [set z | rE y z]])
+  .
+move=> H0.
+split; last first.
+- split.
+  - move=> x' H1.
+    apply/set0Pn.
+    exists x'.
+    rewrite in_set.
+    exact: rrE.
+  - move=> x' y' [H1 H2].
+    rewrite -setI_eq0.
+    rewrite -subset0.
+    by admit.
+- Admitted.
 
 
 End Relation_d'équivalence.
