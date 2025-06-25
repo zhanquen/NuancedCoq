@@ -202,7 +202,8 @@ rewrite /=.
 by [].
 Qed.
 
-Definition surjective f := forall y : F, exists x : E, y = f x.
+Definition surjective (E' F' : finType) (f' : E' -> F') := 
+  forall y : F', exists x : E', y = f' x.
 
 Proposition imfF_surj_E :
   surjective f <-> (f @: E == [set: F]).
@@ -228,5 +229,16 @@ split.
   by exists x.
 Qed.
   
+Proposition comp_surj1 : 
+  (surjective f) /\ (surjective g) -> surjective (g \o f).
+Proof.
+move => [H0 H1] z.
+have H2 := (H1 z); move: H2 => [y H2].
+have H3 := (H0 y); move: H3 => [x H3].
+exists x.
+rewrite /= -H3.
+by [].
+Qed.
 
+(* p118 Prop 3.8 typo: y = f(x) *)
 End Définitions_et_premiers_exemples.
