@@ -19,9 +19,7 @@ Variables (trE : transitive rE) (rrE : reflexive rE) (srE : symmetric rE).
 
 Variable rE_equivalence : transitive rE /\ reflexive rE /\ symmetric rE.
 
-Variables x y : E.
-
-Lemma equiv_E_repres : 
+Lemma equiv_E_repres (x y : E) : 
   [set z | rE x z] = [set z | rE z y] <-> rE x y.
 Proof.
 split.
@@ -64,7 +62,21 @@ split; last first.
   - move=> x' y' [H1 H2].
     rewrite -setI_eq0.
     rewrite -subset0.
-    by admit.
+    apply/subsetP; rewrite/sub_mem => z'.
+    rewrite in_setI !in_set; move/andP => [] H3.
+    rewrite srE => H4.
+    move: (trE H3 H4) => H5.
+    apply equiv_E_repres in H5.
+    move/setP/subset_eqP/andP in H5.
+    move: H5 => [H5 H6].
+    move/subsetP in H5.
+    move/subsetP in H6.
+    rewrite/sub_mem in H5 H6.
+    have H7 := (H5 z'); rewrite in_set in H7.
+    have H8 := (H6 z'); rewrite in_set in H8.
+    have H9 := (H7 H3).
+    have H10 := (H8 H4).
+    move: (H_R2 z').
 - Admitted.
 
 
