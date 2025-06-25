@@ -239,6 +239,17 @@ exists x.
 rewrite /= -H3.
 by [].
 Qed.
-
 (* p118 Prop 3.8 typo: y = f(x) *)
+
+Proposition comp_surj2 :
+  surjective (g \o f) -> surjective g.
+Proof.
+move=> H0 z.
+have/= H1 := H0 z.
+move: H1 => [x H1].
+exists (f x).
+by [].
+Qed.
+
+
 End Définitions_et_premiers_exemples.
