@@ -251,5 +251,20 @@ exists (f x).
 by [].
 Qed.
 
+Definition my_bijective := injective f /\ surjective f.
+
+Proposition carac_bij12 : 
+  my_bijective -> forall y : F, exists! x : E, y = f x.
+Proof.
+move=> [Hi Hs] y.
+move: (Hs y) => [x H0].
+exists x.
+rewrite/unique; split; rewrite //.
+rewrite/injective in Hi.
+move => x' Hx'.
+move: (Hi x x').
+rewrite -Hx' H0 => H1.
+exact: H1.
+Qed.
 
 End Définitions_et_premiers_exemples.
