@@ -68,7 +68,15 @@ split; last first.
     rewrite srE => H4.
     have H5 := trE H3 H4.
     apply equiv_E_repres in H5.
-    by admit.
+    have H7 := H_R2 z.
+    rewrite/unique in H7.
+    move: H7 => [x'' [H7 H8]].
+    have Hx' := H8 x'; rewrite H1 in_set //= in Hx'.
+    have Hx'0 := Hx' H3.
+    have Hy' := H8 y'; rewrite H2 in_set srE //= in Hy'.
+    have Hy'0 := Hy' H4.
+    rewrite -Hx'0 -Hy'0 in H6.
+    by move/negP: H6 => [].
 - apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x H1.
   - apply/bigcupP.
     have H2 := H_R2 x.
@@ -135,7 +143,5 @@ Qed.
 p270 Remarque 7.1 does not provide a clear reason for antisymetrique;
 and antireflexive could be demonstrated with antisymetrique
 *)
-
-Proposition lexicographique : 
   
 End Relation_d'ordre.
