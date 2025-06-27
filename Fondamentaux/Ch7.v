@@ -49,7 +49,7 @@ Proposition classe_equivalence_partition :
   [set: E] != set0 -> 
   ([set: E] = \bigcup_ ( x in R ) [set z | rE x z]) /\ 
   (forall x, x \in R -> [set z | rE x z] != set0) /\
-  (forall x y, x \in R /\ y \in R -> [disjoint [set z | rE x z] & [set z | rE y z]])
+  (forall x y, x \in R /\ y \in R /\ x != y -> [disjoint [set z | rE x z] & [set z | rE y z]])
   .
 move=> H0.
 split; last first.
@@ -59,26 +59,28 @@ split; last first.
     exists x'.
     rewrite in_set.
     exact: rrE.
-  - move=> x' y' [H1 H2].
+  - move=> x' y' [H1 [H2 H6]].
     rewrite -setI_eq0.
-    rewrite -subset0.
-    apply/subsetP; rewrite/sub_mem => z'.
-    rewrite in_setI !in_set; move/andP => [] H3.
+    apply: negbNE.
+    apply/set0Pn.
+    move => [z]; rewrite in_setI !in_set.
+    move/andP => [H3].
     rewrite srE => H4.
-    move: (trE H3 H4) => H5.
+    have H5 := trE H3 H4.
     apply equiv_E_repres in H5.
-    move/setP/subset_eqP/andP in H5.
-    move: H5 => [H5 H6].
-    move/subsetP in H5.
-    move/subsetP in H6.
-    rewrite/sub_mem in H5 H6.
-    have H7 := (H5 z'); rewrite in_set in H7.
-    have H8 := (H6 z'); rewrite in_set in H8.
-    have H9 := (H7 H3).
-    have H10 := (H8 H4).
-    move: (H_R2 z').
-- Admitted.
-
+    by admit.
+- apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x H1.
+  - apply/bigcupP.
+    have H2 := H_R2 x.
+    move: H2 => [x0].
+    rewrite/unique//=.
+    move => [/andP [H2 H3] H4].
+    exists x0.
+      by rewrite H2.
+    by [].
+    (* p264 mistake: please refer to this line *)  
+  - by rewrite in_setT.
+Qed.
 
 End Relation_d'équivalence.
 
