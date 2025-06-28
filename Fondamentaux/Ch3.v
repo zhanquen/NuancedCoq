@@ -181,6 +181,12 @@ apply/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
 - by rewrite/preimset !in_set.
 Qed.
 
+End Définitions_et_premiers_exemples.
+
+Section Injectivité_Surjectivité.
+
+Variables (E F G : finType) (f : E -> F) (g : F -> G).
+
 Proposition comp_inj1 :
   (injective f) /\ (injective g) -> injective (g \o f).
 Proof.
@@ -251,7 +257,35 @@ exists (f x).
 by [].
 Qed.
 
+
+End Injectivité_Surjectivité.
+
+
+Section Bijectivité.
+
+Variables (E F : finType) (f : E -> F).
+
 Definition my_bijective := injective f /\ surjective f.
+
+(**
+??? : a problem of cop raises here: we are not allowed to define {ffun ...}
+when we encounter the composition.
+*)
+Proposition carac_bij31 :
+  (exists g , (g \o f =1 @id E) /\ (f \o g =1 @id F)) -> my_bijective.
+Proof.
+move=> [g [Hgf Hfg]].
+rewrite/my_bijective; split.
+- apply: (@comp_inj2 _ _ _ _ g).
+  rewrite/injective=> x x'; rewrite/eqfun in Hgf.
+  by rewrite !Hgf.
+- Check comp_surj2.
+  apply: (@comp_surj2 _ _ _ g f).
+  rewrite/surjective.
+  rewrite/eqfun in Hfg.
+  move=> y; exists y.
+  by rewrite !Hfg.
+Qed.
 
 Proposition carac_bij12 : 
   my_bijective -> forall y : F, exists! x : E, y = f x.
@@ -267,4 +301,12 @@ rewrite -Hx' H0 => H1.
 exact: H1.
 Qed.
 
-End Définitions_et_premiers_exemples.
+(**
+??? : How can we create a function with help of the existence predicate?
+*)
+
+Proposition carac_bij23 : 
+  (forall y : F, exists! x : E, y = f x) -> exists g0 , (g0 \o f =1 @id E) /\ (f \o g0 =1 @id F).
+Admitted.
+
+End Bijectivité.
