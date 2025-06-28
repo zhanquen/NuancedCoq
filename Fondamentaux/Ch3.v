@@ -310,12 +310,29 @@ Proposition carac_bij23 :
   (forall y : F, exists! x : E, y = f x) -> exists g0 , (g0 \o f =1 @id E) /\ (f \o g0 =1 @id F).
 Admitted.
 
-Variables (ff : {ffun E -> F}) (bijff : bijective ff).
-
-Check (bijective ff).
-Check (right_inverse ff).
-
-Proposition coh_invf (F' : {set F}):
-  ff @^-1: F' =  
-
 End Bijectivité.
+
+Section Complément.
+
+Variable E : finType.
+
+Let PE := powerset [set: E].
+
+Theorem de_Cantor : 
+  ~ (
+  exists f : {ffun E -> (set_of_finType E)}, 
+    (forall y : (set_of_finType E), exists x : E, f x = y)
+  ).
+Proof.
+move=> [f Hf].
+have H1 := Hf [set x0 : E | x0 \notin (f x0)].
+move: H1 => [x H1].
+have [] := boolP (x \in [set x0 : E | x0 \notin (f x0)]) => H2.
+- have H3 := H2.
+  rewrite in_set H1 in H3; move/negP in H3.
+  by [].
+- have H3 : x \in [set x0 | x0  \notin f x0] by rewrite in_set H1.
+  by move/negP in H2.
+Qed.
+
+End Complément.
