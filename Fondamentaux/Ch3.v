@@ -303,10 +303,19 @@ Qed.
 
 (**
 ??? : How can we create a function with help of the existence predicate?
+https://proofassistants.stackexchange.com/questions/4013/bijections-on-coq
 *)
 
 Proposition carac_bij23 : 
   (forall y : F, exists! x : E, y = f x) -> exists g0 , (g0 \o f =1 @id E) /\ (f \o g0 =1 @id F).
 Admitted.
+
+Variables (ff : {ffun E -> F}) (bijff : bijective ff).
+
+Check (bijective ff).
+Check (right_inverse ff).
+
+Proposition coh_invf (F' : {set F}):
+  ff @^-1: F' =  
 
 End Bijectivité.
