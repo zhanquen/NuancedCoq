@@ -143,5 +143,19 @@ Qed.
 p270 Remarque 7.1 does not provide a clear reason for antisymetrique;
 and antireflexive could be demonstrated with antisymetrique
 *)
-  
+
+Let lexic := [rel p p' | (rEstor p.1 p'.1) || ((p.1 == p'.1) && (rF p.2 p'.2))].
+
+Proposition lexicographique_order : 
+  reflexive lexic /\ antisymmetric lexic /\ transitive lexic.
+Proof.
+split; [|split].
+- move => p; rewrite/lexic/=.
+  apply/orP; right.
+  apply/andP; split; first by apply/eqP.
+  apply: rrF.
+- move => p1 p2; rewrite/lexic/=.
+- 
+Admitted.
+
 End Relation_d'ordre.
