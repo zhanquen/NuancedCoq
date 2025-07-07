@@ -78,4 +78,32 @@ Proposition distinction_cas2 : P \/ Q -> R.
 case.
 Admitted.
 
+Variables (T : Type) (Pr : T -> Prop).
+
+Proposition dém_univ1 : forall x, Pr x.
+move=> x.
+Admitted.
+
+Proposition dém_univ2 : (exists x0, ~ (Pr x0)) -> ~ (forall x, Pr x).
+Proof.
+move => [x0 Hx0] H1.
+have H1x0:= H1 x0.
+by [].
+Qed.
+
+(* *)
+(* *)
+
+Proposition dém_absurde : (~ P -> False) -> P.
+Proof.
+rewrite-/(@not (~P)) classic.
+by [].
+Qed.
+
+Variable Prn : nat -> Prop.
+
+Proposition dém_récc : forall n : nat, Prn n.
+elim=> [].
+Admitted.
+
 End Récapitulatif_des_méthodes_déjÀ_vues.
