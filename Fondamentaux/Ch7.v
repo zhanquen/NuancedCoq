@@ -173,11 +173,12 @@ split; [|split].
     by [].
 - move => p1 p2 p3; rewrite/lexic/=.
   move => r21 r13.
-  apply/orP; right.
-  move/orP in r21.
-  move/orP in r13.
-  - 
-  - 
+  apply/orP; left.
+  move/orP: r21 => []; move/andP => [r210 r211]; move/orP: r13 => []; move/andP => [r130 r131]; 
+  apply/andP; split.
+  - by admit.
+  - exact: (trE r211).
+  - by admit.
   - 
   - 
   - 
