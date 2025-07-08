@@ -306,9 +306,18 @@ Qed.
 https://proofassistants.stackexchange.com/questions/4013/bijections-on-coq
 *)
 
-Proposition carac_bij23 : 
-  (forall y : F, exists! x : E, y = f x) -> exists g0 , (g0 \o f =1 @id E) /\ (f \o g0 =1 @id F).
-Admitted.
+Proposition carac_bij23 : (forall y : F, {x : E | f x = y /\ (forall z, f z = y -> x = z) }) 
+  -> exists g0 , (g0 \o f =1 @id E) /\ (f \o g0 =1 @id F).
+Proof.
+move=> g.
+exists (fun y => proj1_sig (g y)).
+split; rewrite/eqfun.
+- move=> x; rewrite/=.
+  apply (proj2 (proj2_sig (g (f x))) x).
+  by [].
+- move=> y; rewrite/=.
+  apply (proj2_sig (g y)).
+Qed.
 
 End Bijectivité.
 
