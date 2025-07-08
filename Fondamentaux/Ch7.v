@@ -161,22 +161,29 @@ split; [|split].
     have/eqP H' := arE H.
     move/negP in H10.
     by [].
-  - apply/pair_eqP; rewrite /=; apply/andP; split; first by [].
-    by admit.
+  - rewrite eq_sym in H10.
+    move/negP in H20.
+    by [].
   - rewrite eq_sym in H20.
     move/negP in H10.
     by [].
-  - apply/pair_eqP; rewrite /=; apply/andP; split.
+  - apply/pair_eqP; rewrite /=; apply/andP; split; first by [].
+    have H : (rF p1.2 p2.2) && (rF p2.2 p1.2) by apply/andP; split.
+    have/eqP H' := arF H.
     by [].
 - move => p1 p2 p3; rewrite/lexic/=.
   move => r21 r13.
   apply/orP; right.
   move/orP in r21.
   move/orP in r13.
-  move: r13 r21 => [].
   - 
   - 
-  
+  - 
+  - 
+  - 
+  - 
+  - 
+  -
 Admitted.
 
 End Relation_d'ordre.
