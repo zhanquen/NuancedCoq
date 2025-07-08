@@ -155,7 +155,15 @@ split; [|split].
   apply/andP; split; first by apply/eqP.
   apply: rrF.
 - move => p1 p2; rewrite/lexic/=.
-- 
+  move/andP => [H1 H2].
+  by admit.
+- move => p1 p2 p3; rewrite/lexic/=.
+  move => r21 r13.
+  apply/orP; right.
+  move/orP in r21.
+  move/orP in r13.
+  move: r13 r21 => [].
+  
 Admitted.
 
 End Relation_d'ordre.
