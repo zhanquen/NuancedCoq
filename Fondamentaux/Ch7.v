@@ -156,13 +156,22 @@ split; [|split].
   apply: rrF.
 - move => p1 p2; rewrite/lexic/=.
   move/andP => [H1 H2].
-  by admit.
+  move/orP: H2 => []; move/andP => [H20 H21]; move/orP: H1 => []; move/andP => [H10 H11].
+  - have H : (rE p1.1 p2.1) && (rE p2.1 p1.1) by apply/andP; split.
+    have/eqP H' := arE H.
+    move/negP in H10.
+    by [].
+  - by admit.
+  - by admit.
+  - by admit.
 - move => p1 p2 p3; rewrite/lexic/=.
   move => r21 r13.
   apply/orP; right.
   move/orP in r21.
   move/orP in r13.
   move: r13 r21 => [].
+  - 
+  - 
   
 Admitted.
 
