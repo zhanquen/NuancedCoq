@@ -163,7 +163,8 @@ split; [|split].
     by [].
   - by admit.
   - by admit.
-  - by admit.
+  - apply/pair_eqP; rewrite /=; apply/andP; split.
+    by [].
 - move => p1 p2 p3; rewrite/lexic/=.
   move => r21 r13.
   apply/orP; right.
