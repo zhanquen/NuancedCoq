@@ -161,8 +161,11 @@ split; [|split].
     have/eqP H' := arE H.
     move/negP in H10.
     by [].
-  - by admit.
-  - by admit.
+  - apply/pair_eqP; rewrite /=; apply/andP; split; first by [].
+    by admit.
+  - rewrite eq_sym in H20.
+    move/negP in H10.
+    by [].
   - apply/pair_eqP; rewrite /=; apply/andP; split.
     by [].
 - move => p1 p2 p3; rewrite/lexic/=.
