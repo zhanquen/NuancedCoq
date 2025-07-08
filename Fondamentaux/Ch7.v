@@ -173,18 +173,28 @@ split; [|split].
     by [].
 - move => p1 p2 p3; rewrite/lexic/=.
   move => r21 r13.
-  apply/orP; left.
-  move/orP: r21 => []; move/andP => [r210 r211]; move/orP: r13 => []; move/andP => [r130 r131]; 
-  apply/andP; split.
-  - by admit.
-  - exact: (trE r211).
-  - by admit.
-  - 
-  - 
-  - 
-  - 
-  - 
-  -
-Admitted.
+  move/orP: r21 => []; move/andP => [r210 r211]; move/orP: r13 => []; move/andP => [r130 r131].
+  - apply/orP; left.
+    - have H : (rEstor p2.1 p3.1).
+      by apply: (@tr_Estor p1.1); rewrite/rEstor/=; apply/andP; split.
+      by [].
+  - apply/orP; left; apply/andP; split.
+    - move/eqP: r130 <-.
+      by [].
+    - apply: (trE r211).
+      move/eqP: r130 <-.
+      exact: rrE.
+  - apply/orP; left; apply/andP; split.
+    - move/eqP: r210 ->.
+      by [].
+    - apply: (trE _ r131).
+      move/eqP: r210 ->.
+      exact: rrE.
+  - apply/orP; right; apply/andP; split.
+    - move/eqP: r210 ->.
+      move/eqP: r130 ->.
+      by [].
+    - exact: (trF r211).
+Qed.
 
 End Relation_d'ordre.
