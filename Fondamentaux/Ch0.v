@@ -106,4 +106,17 @@ Proposition dém_récc : forall n : nat, Prn n.
 elim=> [].
 Admitted.
 
+Variable (E : finType) (P1 P2 : pred E).
+
+Proposition analyse_synthese : exists x : E, P1 x.
+have analyse: forall x : E, P1 x -> P2 x by admit.
+have set_Pr' := finset P2.
+have synthesis : set_Pr' :&: (finset P1) != set0 by admit.
+move/set0Pn in synthesis.
+move: synthesis => [x]; rewrite in_setI in_set.
+move/andP => [H1 H2].
+exists x.
+by [].
+Admitted.
+
 End Récapitulatif_des_méthodes_déjÀ_vues.
