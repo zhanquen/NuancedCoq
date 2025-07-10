@@ -329,6 +329,14 @@ exists (g y).
 by rewrite Hy.
 Qed.
 
+Lemma cond_injective : g \o f =1 @id E -> injective f.
+Proof.
+rewrite/eqfun/=/injective => H x1 x2 H12.
+have H12' : g (f x1) = g (f x2) by rewrite H12.
+rewrite !H in H12'.
+by [].
+Qed.
+
 End Bijectivité.
 
 Section Complément.
