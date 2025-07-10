@@ -319,6 +319,16 @@ split; rewrite/eqfun.
   apply (proj2_sig (g y)).
 Qed.
 
+Variable g : F -> E.
+
+Lemma cond_surjective : f \o g =1 @id F -> surjective f.
+Proof.
+rewrite/eqfun/surjective => H y.
+have/= Hy := H y.
+exists (g y).
+by rewrite Hy.
+Qed.
+
 End Bijectivité.
 
 Section Complément.
