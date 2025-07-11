@@ -337,6 +337,19 @@ rewrite !H in H12'.
 by [].
 Qed.
 
+Variable (g' : F -> E) (f' : {ffun E -> F}) (F' : {set F}).
+
+Proposition cohérence_de_inverse  : 
+ (g' \o f' =1 @id E) /\ (f' \o g' =1 @id F) -> f' @^-1: F' == g' @: F'.
+move => [] H0 H1.
+apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
+- rewrite/preimset in_set => Hl.
+  apply/imsetP.
+  exists (f' x); first by [].
+  rewrite /eqfun/= in H0.
+  by rewrite H0.
+- Admitted.
+ 
 End Bijectivité.
 
 Section Complément.
