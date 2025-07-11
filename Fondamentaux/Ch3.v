@@ -348,7 +348,13 @@ apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
   exists (f' x); first by [].
   rewrite /eqfun/= in H0.
   by rewrite H0.
-- Admitted.
+- move/imsetP => [y Hy Hxy].
+  rewrite/preimset in_set.
+  rewrite Hxy.
+  rewrite/eqfun/= in H1.
+  rewrite H1.
+  by [].
+Qed.
  
 End Bijectivité.
 
