@@ -381,4 +381,21 @@ have [] := boolP (x \in [set x0 : E | x0 \notin (f x0)]) => H2.
   by move/negP in H2.
 Qed.
 
+Variable (A : {set E}) (f : {ffun E -> E}).
+Hypothesis (Imf : f @: E \subset A).
+
+Lemma Lemme_de_CB : 
+  injective f -> exists g, g @: E \subset A /\ bijective g.
+Proof.
+move => H.
+Admitted.
+
+Variable F : finType.
+
+Theorem de_Cantor_Bernstein :
+  exists f1 : {ffun E -> F}, exists f2 : {ffun F -> E}, injective f1 /\ injective f2 -> 
+    (exists f3 : {ffun E -> F}, bijective f3).
+Proof.
+Admitted.
+
 End Complément.
