@@ -340,10 +340,10 @@ rewrite !H in H12'.
 by [].
 Qed.
 
-Variable (g' : F -> E) (f' : {ffun E -> F}) (F' : {set F}).
+Variable (f' : {ffun E -> F}) (F' : {set F}).
 
 Proposition cohérence_de_inverse  : 
- (g' \o f' =1 @id E) /\ (f' \o g' =1 @id F) -> f' @^-1: F' == g' @: F'.
+ (g \o f' =1 @id E) /\ (f' \o g =1 @id F) -> f' @^-1: F' == g @: F'.
 move => [] H0 H1.
 apply/eqP/setP/subset_eqP/andP; split; apply/subsetP; rewrite/sub_mem => x.
 - rewrite/preimset in_set => Hl.
@@ -361,6 +361,44 @@ Qed.
  
 End Bijectivité.
 
+Section Prop_bij.
+
+Variable (E F G : finType) (f : {ffun E -> F}) (g : {ffun F -> G}).
+
+Proposition comp_bijective : my_bijective f /\ my_bijective g -> my_bijective (g \o f).
+Proof.
+move => [Hf Hg].
+apply: carac_bij31.
+Admitted.
+
+End Prop_bij.
+
+Section Prod_cartesien.
+
+Variable E : finType.
+
+Variable n : nat.
+Hypothesis n0 : 0 < n.
+Variable E' : 'I_n -> {set E}.
+
+Hypothesis UE : \bigcup_ (i : 'I_n) E' i == [set: E].
+
+Section Def_prod_cartesien.
+
+
+Variable x : 'I_n -> E.
+Hypothesis xi : forall i : 'I_n, x i \in E' i.
+
+Definition phi := [tuple (x i) | i < n].
+
+End Def_prod_cartesien.
+
+Check phi.
+
+Proposition tuple_application : bijective phi.
+Proof.
+Admitted.
+End Prod_cartesien.
 Section Complément.
 
 Variable E : finType.
