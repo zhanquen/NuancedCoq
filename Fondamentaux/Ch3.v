@@ -4,6 +4,7 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive. 
 
+
 Section Définitions_et_premiers_exemples.
 
 Variables (E F G: finType) (H : Type).
@@ -17,6 +18,8 @@ rewrite/eqfun => x.
 rewrite /=. (* trivial by calculation *)
 by [].
 Qed.
+
+Print fonc_comp_assoc.
 
 Proposition Neutralité_de_l'identité_gauche : 
   (@ id F) \o f =1 f.
@@ -365,10 +368,8 @@ Variable E : finType.
 Let PE := powerset [set: E].
 
 Theorem de_Cantor : 
-  ~ (
-  exists f : {ffun E -> (set_of_finType E)}, 
-    (forall y : (set_of_finType E), exists x : E, f x = y)
-  ).
+  ~ (exists f : {ffun E -> (set_of_finType E)}, 
+    (forall y : (set_of_finType E), exists x : E, f x = y)).
 Proof.
 move=> [f Hf].
 have H1 := Hf [set x0 : E | x0 \notin (f x0)].
@@ -381,8 +382,14 @@ have [] := boolP (x \in [set x0 : E | x0 \notin (f x0)]) => H2.
   by move/negP in H2.
 Qed.
 
+Check de_Cantor.
+
 Variable (A : {set E}) (f : {ffun E -> E}).
 Hypothesis (Imf : f @: E \subset A).
+
+Variable (C : nat -> {set E}).
+
+Hypothesis rec_C : forall n : nat, C n.+1 == f @: (C n).
 
 Lemma Lemme_de_CB : 
   injective f -> exists g, g @: E \subset A /\ bijective g.
