@@ -410,17 +410,16 @@ Theorem de_Cantor :
     (forall y : (set_of_finType E), exists x : E, f x = y)).
 Proof.
 move=> [f Hf].
-have H1 := Hf [set x0 : E | x0 \notin (f x0)].
-move: H1 => [x H1].
-have [] := boolP (x \in [set x0 : E | x0 \notin (f x0)]) => H2.
-- have H3 := H2.
-  rewrite in_set H1 in H3; move/negP in H3.
+have H1 := Hf [set x0 : E | x0 \notin (f x0)]; move: H1 => [x H1].
+have [] := boolP (x \in f x) => H2.
+- have H2' := H2; rewrite H1 in_set in H2' ; move/negP in H2'.
   by [].
-- have H3 : x \in [set x0 | x0  \notin f x0] by rewrite in_set H1.
+- have H2' : x \in f x by rewrite H1 in_set.
   by move/negP in H2.
 Qed.
 
-Check de_Cantor.
+Print de_Cantor.
+
 
 Variable (A : {set E}) (f : {ffun E -> E}).
 Hypothesis (Imf : f @: E \subset A).
