@@ -418,7 +418,19 @@ have [] := boolP (x \in f x) => H2.
   by move/negP in H2.
 Qed.
 
-Print de_Cantor.
+Variable F : finType.
+
+Theorem FixedPoint : 
+  (exists phi : {ffun E -> {ffun E -> F}}, surjective phi) -> 
+    forall f : {ffun F -> F}, exists s : F, (f s) = s.
+Proof.
+move=> [phi Hphi]; move=> f.
+pose q := finfun (fun a => f (phi a a)).
+move: (Hphi q)=> [p Hp].
+exists (phi p p).
+rewrite -{2}Hp.
+by rewrite ffunE.
+Qed.
 
 
 Variable (A : {set E}) (f : {ffun E -> E}).
@@ -434,12 +446,22 @@ Proof.
 move => H.
 Admitted.
 
-Variable F : finType.
-
 Theorem de_Cantor_Bernstein :
   exists f1 : {ffun E -> F}, exists f2 : {ffun F -> E}, injective f1 /\ injective f2 -> 
     (exists f3 : {ffun E -> F}, bijective f3).
 Proof.
 Admitted.
 
+
+Definition my_False : forall Pp : Prop, Pp -> Pp.
+move=> Pp.
+move=> pp.
+by [].
+Qed.
+Check my_False.
+Print my_False.
+
 End Complément.
+
+
+
