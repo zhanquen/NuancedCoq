@@ -26,6 +26,17 @@ Definition Unanimous F := forall r : relL, F [tuple r | i < n] = r.
 Definition Pareto_Efficient F := forall tup_r : L^n, forall a b : A, 
   (forall i, L (tnth tup_r i) a b) -> (L (F tup_r) a b).
 Definition dictatorial F := exists i : I, forall tup_r : L^n, F tup_r = tnth tup_r i.
+Definition dictatorial_alt F := exists i : I, forall tup_r : L^n, forall a b : A, 
+(L (tnth tup_r i) a b) <-> (L (F tup_r) a b).
+
+Lemma DictatorshipToAlt : dictatorial F <-> dictatorial_alt F.
+Proof.
+split; move=> [] i0 Hi0; exists i0; move=> tup_r.
+- move=> a b.
+  rewrite Hi0.
+  by [].
+- Admitted.
+
 Definition IIA F := forall a b : A, forall tup_p tup_q : L^n, 
 (forall i, (L (tnth tup_p i) a b) <-> (L (tnth tup_q i) a b)) -> 
   ((L (F tup_p) a b) <-> (L (F tup_q) a b)).
@@ -41,6 +52,12 @@ rewrite (@HIIA _ _ _ tup_ref).
 - move=> i'; split=> H'; [rewrite tnth_map|];apply: H1.
 Qed.
 
+Theorem Arrow's23 : n = 2 /\ #|A| = 3 -> Unanimous F /\ IIA F -> dictatorial F.
+Proof.
+move=> [] Hn  HA  [] HUnan HIIA.
+Admitted.
+
+Qed.
 Theorem Arrow's : 2 < #|A| -> (Unanimous F /\ IIA F -> dictatorial F).
 Admitted.
 End ArrowThm.
