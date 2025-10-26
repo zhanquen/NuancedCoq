@@ -29,13 +29,13 @@ Definition dictatorial F := exists i : I, forall tup_r : L^n, F tup_r = tnth tup
 Definition dictatorial_alt F := exists i : I, forall tup_r : L^n, forall a b : A, 
 (L (tnth tup_r i) a b) <-> (L (F tup_r) a b).
 
-Lemma DictatorshipToAlt : dictatorial F <-> dictatorial_alt F.
+Lemma DictatorshipToAlt : dictatorial F -> dictatorial_alt F.
 Proof.
-split; move=> [] i0 Hi0; exists i0; move=> tup_r.
-- move=> a b.
-  rewrite Hi0.
-  by [].
-- Admitted.
+move=> [] i0 Hi0; exists i0; move=> tup_r.
+move=> a b.
+rewrite Hi0.
+by [].
+Qed.
 
 Definition IIA F := forall a b : A, forall tup_p tup_q : L^n, 
 (forall i, (L (tnth tup_p i) a b) <-> (L (tnth tup_q i) a b)) -> 
@@ -57,7 +57,6 @@ Proof.
 move=> [] Hn  HA  [] HUnan HIIA.
 Admitted.
 
-Qed.
 Theorem Arrow's : 2 < #|A| -> (Unanimous F /\ IIA F -> dictatorial F).
 Admitted.
 End ArrowThm.
