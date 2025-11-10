@@ -4,13 +4,23 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive. 
 
-Section ArrowThm.
-Variables (A : finType).
-Variables (n'' : nat).
+Module Arrow.
+Variable (n'' : nat).
+
+Section Voting.
+
+Variables (A : finType). (* the set of outcomes *)
+
 Definition n' := n''.+1.
 Definition n := n'.+1.
-Definition I := 'I_n.
-Variables i : I.
+
+Fact gt1n: 1 < n.
+Proof.
+by []. 
+Qed.
+
+Definition I := 'I_n. (* the set of agents *)
+Variables i : I. (* agent i *)
 Record relL :=
   RL {
     L : rel A;
@@ -20,10 +30,11 @@ Record relL :=
   }. 
 Variables preference : I -> relL.
 (** Define social welfare and social choice *)
-Variable F : n.-tuple relL -> relL. (* SC *)
-Notation "L^n" := (n.-tuple relL).
+Notation "L^n" := (n.-tuple relL). (* preference profile *)
+Definition SCfun := L^n -> relL. (* Social Choice *)
+Variable F : SCfun. 
 Definition Unanimous F := forall r : relL, F [tuple r | i < n] = r.
-Definition Pareto_Efficient F := forall tup_r : L^n, forall a b : A, 
+Definition Unanimous_alt F := forall tup_r : L^n, forall a b : A, 
   (forall i, L (tnth tup_r i) a b) -> (L (F tup_r) a b).
 Definition dictatorial F := exists i : I, forall tup_r : L^n, F tup_r = tnth tup_r i.
 Definition dictatorial_alt F := exists i : I, forall tup_r : L^n, forall a b : A, 
@@ -41,7 +52,7 @@ Definition IIA F := forall a b : A, forall tup_p tup_q : L^n,
 (forall i, (L (tnth tup_p i) a b) <-> (L (tnth tup_q i) a b)) -> 
   ((L (F tup_p) a b) <-> (L (F tup_q) a b)).
 
-Lemma UnaniousToAlt : Unanimous F /\ IIA F -> Pareto_Efficient F.
+Lemma UnaniousToAlt : Unanimous F /\ IIA F -> Unanimous_alt F.
 Proof. 
 move=> [] HUnan HIIA tup_r a b H1.
 pose agent_ref := (@ord0 n').
@@ -51,6 +62,42 @@ rewrite (@HIIA _ _ _ tup_ref).
   apply: H1.
 - move=> i'; split=> H'; [rewrite tnth_map|];apply: H1.
 Qed.
+
+End Voting.
+
+Section InductiveArrow.
+
+(** If there is a SC function for n agents and m+1 alternatives that is 
+unanious_alt, IIA, non-dictatorial,
+*)
+
+Variable m : nat.
+Hypothesis gt2m : 2 < m.
+Variable A A' : finType.
+Variable a : A'.
+Hypothesis A'aA : [set: A'] :\ a == [set: A].
+Hypothesis anotinA : a \notin A.
+(**
+we have to specify that A' \ {a} == A
+*)
+Check (SCfun A).
+Hypothesis (cardA : #|A| = m) (cardA' : #|A'| = m.+1).
+Lemma Ind_Arrow: 
+(exists F' : (SCfun A'), (Unanimous_alt F') /\ (IIA F') /\ ~(dictatorial_alt F')) -> 
+(exists F : (SCfun A), (Unanimous_alt F) /\ (IIA F) /\ ~(dictatorial_alt F)).
+Proof.
+move=> [] F' [] HunanF' [] HIIAF' HnotDF'.
+Check I.
+Qed.
+
+End InductiveArrow.
+
+End Arrow.
+
+
+
+
+
 
 Theorem Arrow's23 : n = 2 /\ #|A| = 3 -> Unanimous F /\ IIA F -> dictatorial F.
 Proof.
