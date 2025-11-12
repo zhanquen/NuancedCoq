@@ -10,7 +10,7 @@ Variable (n'' : nat).
 Section Voting.
 
 Variables (A : finType). (* the set of outcomes *)
-
+Variable setA : {set A}.
 Definition n' := n''.+1.
 Definition n := n'.+1.
 
@@ -28,6 +28,8 @@ Record relL :=
     asL : antisymmetric L;
     totL : total L
   }. 
+Definition rl (r : relL) (x y : A) := (x \in setA) /\ (y \in setA) /\ L r x y.
+
 Variables preference : I -> relL.
 (** Define social welfare and social choice *)
 Notation "L^n" := (n.-tuple relL). (* preference profile *)
@@ -35,10 +37,10 @@ Definition SCfun := L^n -> relL. (* Social Choice *)
 Variable F : SCfun. 
 Definition Unanimous F := forall r : relL, F [tuple r | i < n] = r.
 Definition Unanimous_alt F := forall tup_r : L^n, forall a b : A, 
-  (forall i, L (tnth tup_r i) a b) -> (L (F tup_r) a b).
+  (forall i, rl (tnth tup_r i) a b) -> (rl (F tup_r) a b).
 Definition dictatorial F := exists i : I, forall tup_r : L^n, F tup_r = tnth tup_r i.
 Definition dictatorial_alt F := exists i : I, forall tup_r : L^n, forall a b : A, 
-(L (tnth tup_r i) a b) <-> (L (F tup_r) a b).
+(rl (tnth tup_r i) a b) <-> (rl (F tup_r) a b).
 
 Lemma DictatorshipToAlt : dictatorial F -> dictatorial_alt F.
 Proof.
@@ -49,8 +51,8 @@ by [].
 Qed.
 
 Definition IIA F := forall a b : A, forall tup_p tup_q : L^n, 
-(forall i, (L (tnth tup_p i) a b) <-> (L (tnth tup_q i) a b)) -> 
-  ((L (F tup_p) a b) <-> (L (F tup_q) a b)).
+(forall i, (rl (tnth tup_p i) a b) <-> (rl (tnth tup_q i) a b)) -> 
+  ((rl (F tup_p) a b) <-> (rl (F tup_q) a b)).
 
 Lemma UnaniousToAlt : Unanimous F /\ IIA F -> Unanimous_alt F.
 Proof. 
@@ -73,10 +75,20 @@ unanious_alt, IIA, non-dictatorial,
 
 Variable m : nat.
 Hypothesis gt2m : 2 < m.
-Variable A A' : finType.
-Variable a : A'.
-Hypothesis A'aA : [set: A'] :\ a == [set: A].
-Hypothesis anotinA : a \notin A.
+Variable A : finType.
+Variable setA' setA : {set A}.
+Variable a : A.
+Hypothesis ainsetA : a \in setA.
+Hypothesis rel_setAsetA' : setA :\ a = setA'.
+Fact anotinsetA' : a \notin setA'.
+Proof.
+apply/negP => ainsetA'.
+rewrite -rel_setAsetA' in ainsetA'.
+rewrite setD11 in ainsetA'.
+by [].
+Qed.
+
+
 (**
 we have to specify that A' \ {a} == A
 *)
@@ -93,7 +105,6 @@ Qed.
 End InductiveArrow.
 
 End Arrow.
-
 
 
 
