@@ -1,0 +1,33 @@
+From Coq Require Import Init.Prelude Unicode.Utf8.
+From mathcomp Require Import all_ssreflect all_algebra.
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive. 
+
+Section IMP. 
+(**
+IMP: a simple imperative language
+*)
+Let N := int. (* numbers *) 
+Let T := bool. (* truth values *)
+Variable Loc : Type. (* locations *)
+Inductive Aexp : Type := (* Arithmetic expression *)
+|  n : int -> Aexp
+|  X : Loc -> Aexp
+| aplus (a0 a1 : Aexp)
+| aminus (a0 a1 : Aexp)
+| atimes (a0 a1 : Aexp).
+Inductive Bexp : Type := (* Boolean expression *)
+| b : bool -> Bexp
+| beqv (a0 a1 : Aexp)
+| bleq (a0 a1 : Aexp)
+| bneg : Bexp -> Bexp
+| bconj (b0 b1 : Bexp)
+| Bdisj (b0 b1 : Bexp).
+Inductive Comm : Type := (* Command expression *)
+| skip : Comm
+| assign (X : Loc) (a : Aexp)
+| concat__ (c0 c1 : Comm)
+| if_then_else_ (b : Bexp) (c0 c1 : Comm)
+| while_do_ (b : Bexp) (c : Comm).
+End IMP.
