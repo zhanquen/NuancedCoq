@@ -12,6 +12,7 @@ Properties in this book concern:
   - Logics (Chapter 1);
   - The set theory (Chapter 2);
   - Function (Chapter 3);
+  - Demonstration methods (Chapter 4);
   - Some propositions of Relation (Chapter 7);
 
 Author: Zhan JING
