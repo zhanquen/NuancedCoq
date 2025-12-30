@@ -81,5 +81,25 @@ rewrite Bool.andb_comm  __1_1.
 by [].
 Qed.
 
-
+Proposition conj_imp_droite : forall P Q R : bool, (P && Q ==> R) = (P ==> R) || (Q ==> R).
+Proof.
+move=> P Q R.
+apply/idP/idP=> Hleft.
+- have [] := boolP (P ==> R); have [] := boolP (Q ==> R); rewrite //=.
+(* note that in this direction of imp, EM is necessary. But not in the other *)
+  rewrite  !__1_6.
+  move/andP=> [] Hq Hnotr.
+  move/andP=> [] Hp Hnotr'.
+  rewrite -implybF in Hnotr.
+  move/implyP in Hnotr.
+  apply: Hnotr.
+  move/implyP in Hleft.
+  apply: Hleft.
+  by apply/andP.
+- apply/implyP; move/andP.
+  case=> Hp Hq.
+  move/orP in Hleft.
+  by move: Hleft => []; move/implyP; apply.
+Qed. 
+  
 Section Exercices.
