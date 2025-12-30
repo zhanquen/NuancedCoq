@@ -14,7 +14,7 @@ Proposition __1_1 : forall P, P && (~~ P) = false.
 Proof.
 by case.
 Qed.
-Proposition __1_2 : forall P, ~~ (~~ P) = P.
+Proposition double_negation : forall P, ~~ (~~ P) = P.
 Proof.
 by case.
 Qed.
@@ -41,10 +41,10 @@ have H0 := (dist_et_Àdroit (~~ P) (~~ Q) (~~ R)).
 have H1 := __1_4 H0.
 rewrite [in LHS]Lois_de_De_Morgan__1 in H1.
 rewrite [in RHS]Lois_de_De_Morgan__2 in H1.
-rewrite __1_2 in H1.
+rewrite double_negation in H1.
 rewrite [in LHS]Lois_de_De_Morgan__2 in H1.
 rewrite ![in RHS]Lois_de_De_Morgan__1 in H1.
-rewrite !__1_2 in H1.
+rewrite !double_negation in H1.
 by [].
 Qed.
 Proposition __1_5 : forall P Q : bool, (P ==> Q) = (~~ P) || Q.
@@ -68,3 +68,18 @@ Proof.
 by case; case; case.
 Qed.
 End Logique_Propositionnelle.
+
+Section Exercices.
+(* Ex 1.2. *)
+Proposition du_tiers_exclu : forall P : bool, P || ~~ P = true.
+Check __1_1.
+Proof.
+Check double_negation.
+move=> P.
+rewrite -(@double_negation P) -Lois_de_De_Morgan__1 double_negation.
+rewrite Bool.andb_comm  __1_1.
+by [].
+Qed.
+
+
+Section Exercices.
