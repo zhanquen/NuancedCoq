@@ -12,6 +12,15 @@ Lemma my_contra : forall A B : Prop, (A -> B) -> (~ B -> ~ A).
 Proof.
 by move=> A B H0 H1 H2; apply: H1; apply: H0.
 Qed.
+
+Lemma before_classic : forall A : Prop, (~ ~ ~ A) <-> ~ A.
+Proof.
+move=> A; split.
+- apply: my_contra.
+  by move=> Ha [].
+- by move => Hnota [].
+Qed.
+
 Hypothesis classic : forall A : Prop, (~ ~ A) = A.
 Lemma my_contra_inv : forall A B : Prop, (~ B -> ~ A) -> (A -> B).
 Proof.
