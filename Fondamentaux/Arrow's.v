@@ -1,26 +1,35 @@
-From Coq Require Import Init.Prelude Unicode.Utf8.
-From mathcomp Require Import all_ssreflect all_algebra.
+From Coq Require Import Init.Prelude Unicode.Utf8 Logic.FunctionalExtensionality.
+From mathcomp Require Import all_ssreflect.
+
 Set Implicit Arguments.
 Unset Strict Implicit.
-Unset Printing Implicit Defensive. 
+Unset Printing Implicit Defensive.
+
+(**
+The file is compiled under mech.v and is used for the test of codex.
+*)
 
 Module Arrow.
+
+Variable (A : finType). (* the set of alternatives/outcomes *)
+
+Variable setA : {set A}.
+
 Variable (n'' : nat).
 
-Section Voting.
-
-Variables (A : finType). (* the set of outcomes *)
-Variable setA : {set A}.
 Definition n' := n''.+1.
+
 Definition n := n'.+1.
 
-Fact gt1n: 1 < n.
-Proof.
-by []. 
-Qed.
+  Fact leq2n: 2 <= n.
+    Proof.
+    by []. 
+    Qed.
 
-Definition I := 'I_n. (* the set of agents *)
-Variables i : I. (* agent i *)
+Definition I := 'I_n. (* the set of individuals/agents *)
+
+Variable i : I. (* agent i *)
+
 Record relL :=
   RL {
     L : rel A;
@@ -28,45 +37,105 @@ Record relL :=
     asL : antisymmetric L;
     totL : total L
   }. 
+
 Definition rl (r : relL) (x y : A) := (x \in setA) /\ (y \in setA) /\ L r x y.
 
-Variables preference : I -> relL.
-(** Define social welfare and social choice *)
-Notation "L^n" := (n.-tuple relL). (* preference profile *)
-Definition SCfun := L^n -> relL. (* Social Choice *)
-Variable F : SCfun. 
-Definition Unanimous F := forall r : relL, F [tuple r | i < n] = r.
-Definition Unanimous_alt F := forall tup_r : L^n, forall a b : A, 
-  (forall i, rl (tnth tup_r i) a b) -> (rl (F tup_r) a b).
-Definition dictatorial F := exists i : I, forall tup_r : L^n, F tup_r = tnth tup_r i.
-Definition dictatorial_alt F := exists i : I, forall tup_r : L^n, forall a b : A, 
-(rl (tnth tup_r i) a b) <-> (rl (F tup_r) a b).
+Variable preference : I -> relL.
 
-Lemma DictatorshipToAlt : dictatorial F -> dictatorial_alt F.
-Proof.
-move=> [] i0 Hi0; exists i0; move=> tup_r.
-move=> a b.
-rewrite Hi0.
-by [].
-Qed.
+Notation "L^n" := (n.-tuple relL). (* preference profile *)
+
+Definition SCfun := L^n -> relL. (* Social Choice *)
+
+Variable F : SCfun. 
+
+Definition Unanimous F := forall r : relL, F [tuple r | i < n] = r.
+
+Definition dictatorial F := exists i : I, forall tup_r : L^n, F tup_r = tnth tup_r i.
 
 Definition IIA F := forall a b : A, forall tup_p tup_q : L^n, 
 (forall i, (rl (tnth tup_p i) a b) <-> (rl (tnth tup_q i) a b)) -> 
   ((rl (F tup_p) a b) <-> (rl (F tup_q) a b)).
+  
+Definition dictatorial_alt F := exists i : I, forall tup_r : L^n, forall a b : A, 
+(rl (tnth tup_r i) a b) <-> (rl (F tup_r) a b).
 
-Lemma UnaniousToAlt : Unanimous F /\ IIA F -> Unanimous_alt F.
-Proof. 
-move=> [] HUnan HIIA tup_r a b H1.
-pose agent_ref := (@ord0 n').
-pose tup_ref := [tuple (tnth tup_r agent_ref) | i < n].
-rewrite (@HIIA _ _ _ tup_ref).
-- rewrite HUnan.
-  apply: H1.
-- move=> i'; split=> H'; [rewrite tnth_map|];apply: H1.
-Qed.
+  Lemma DictatorshipToAlt : dictatorial F -> dictatorial_alt F.
+  Proof.
+  move=> [] i0 Hi0; exists i0; move=> tup_r.
+  move=> a b.
+  rewrite Hi0.
+  by [].
+  Qed.
 
-End Voting.
+Definition Unanimous_alt F := forall tup_r : L^n, forall a b : A, 
+  (forall i, rl (tnth tup_r i) a b) -> (rl (F tup_r) a b).
 
+  Lemma UnaniousToAlt : Unanimous F /\ IIA F -> Unanimous_alt F.
+  Proof. 
+  move=> [] HUnan HIIA tup_r a b H1.
+  pose agent_ref := (@ord0 n').
+  pose tup_ref := [tuple (tnth tup_r agent_ref) | i < n].
+  rewrite (@HIIA _ _ _ tup_ref).
+  - rewrite HUnan.
+    apply: H1.
+  - move=> i'; split=> H'; [rewrite tnth_map|];apply: H1.
+  Qed.
+
+Section two_individuals_and_three_alternatives.
+
+Hypothesis eq_n_2 : n = 2.
+  
+  Fact eq_n'_1 : n' = 1.
+  Proof.
+    move/eqP: eq_n_2.
+    rewrite /n.
+    have -> : 2 = 1 + 1 by [].
+    rewrite -addn1.
+    rewrite eqn_add2r.
+    by move/eqP.
+  Qed.
+
+  Let p := (@inord n' 0).
+  
+  Let q := (@inord n' 1).
+  
+Hypothesis eq_cardA_3 : #|A| = 3.
+
+  Check [tuple of enum A]. (* enumerate A with tuple *)
+  Definition A_enum := [tuple of enum A].
+  
+  Let a : 'I_#|A|.
+    rewrite eq_cardA_3.
+    by move: (@inord 2 0).
+  Defined.
+  
+  Let b : 'I_#|A|.
+    rewrite eq_cardA_3.
+    by move: (@inord 2 1).
+  Defined.
+  
+  Let c : 'I_#|A|.
+    rewrite eq_cardA_3.
+    by move: (@inord 2 2).
+  Defined. 
+
+Theorem Arrow's23 : Unanimous_alt F /\ IIA F -> dictatorial F.
+Proof.
+move=> [] HUnan HIIA.
+Admitted.
+
+End two_individuals_and_three_alternatives.
+
+Section generalarrow.
+
+Hypothesis leq_cardA_3 : #|A| <= 3.
+
+Theorem Arrow's : 2 < #|A| -> (Unanimous F /\ IIA F -> dictatorial F).
+Admitted.
+
+End generalarrow.
+
+(**
 Section InductiveArrow.
 
 (** If there is a SC function for n agents and m+1 alternatives that is 
@@ -104,17 +173,6 @@ Qed.
 
 End InductiveArrow.
 
+*)
+
 End Arrow.
-
-
-
-
-
-Theorem Arrow's23 : n = 2 /\ #|A| = 3 -> Unanimous F /\ IIA F -> dictatorial F.
-Proof.
-move=> [] Hn  HA  [] HUnan HIIA.
-Admitted.
-
-Theorem Arrow's : 2 < #|A| -> (Unanimous F /\ IIA F -> dictatorial F).
-Admitted.
-End ArrowThm.
